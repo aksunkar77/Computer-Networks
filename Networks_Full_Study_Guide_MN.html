@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бүрэн лекцийн тэмдэглэл — Cisco ITN / SRWE / ENSA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap');
+
+  :root {
+    --bg:       #0a0d14;
+    --surface:  #111520;
+    --card:     #161b28;
+    --border:   #1e2638;
+    --accent:   #3b82f6;
+    --accent2:  #22d3ee;
+    --accent3:  #a78bfa;
+    --warn:     #f59e0b;
+    --danger:   #f87171;
+    --success:  #34d399;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --mono:     'JetBrains Mono', monospace;
+    --sans:     'Sora', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  header {
+    background: linear-gradient(135deg, #0a0d14 0%, #0f1829 50%, #0a0f1e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  header p { color: var(--muted); font-size: 0.875rem; margin-top: 4px; }
+
+  .layout { display: flex; min-height: 100vh; }
+
+  nav {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 113px;
+    height: calc(100vh - 113px);
+    overflow-y: auto;
+    padding: 24px 0;
+  }
+  nav::-webkit-scrollbar { width: 4px; }
+  nav::-webkit-scrollbar-track { background: transparent; }
+  nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  nav a {
+    display: block;
+    padding: 9px 24px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  nav a:hover { color: var(--text); border-left-color: var(--accent); background: rgba(59,130,246,.06); }
+  nav .nav-module {
+    padding: 14px 24px 6px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 8px;
+  }
+
+  main {
+    flex: 1;
+    max-width: 900px;
+    padding: 48px 48px 80px;
+    overflow: hidden;
+  }
+
+  .module {
+    margin-bottom: 72px;
+    scroll-margin-top: 130px;
+  }
+  .module-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .module-num {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: var(--mono);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(59,130,246,.3);
+  }
+  .module-title h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .module-title p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin: 32px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h3::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 18px;
+    background: var(--accent2);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  h4 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--accent3);
+    margin: 22px 0 10px;
+  }
+
+  p { margin-bottom: 12px; color: #cbd5e1; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .card.warn { border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.04); }
+  .card.danger { border-color: rgba(248,113,113,.3); background: rgba(248,113,113,.04); }
+  .card.success { border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.04); }
+  .card.info { border-color: rgba(59,130,246,.3); background: rgba(59,130,246,.04); }
+
+  .tip-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .card.warn .tip-label { color: var(--warn); }
+  .card.danger .tip-label { color: var(--danger); }
+  .card.success .tip-label { color: var(--success); }
+  .card.info .tip-label { color: var(--accent); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 16px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  th {
+    background: rgba(59,130,246,.15);
+    color: var(--accent);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  td {
+    padding: 9px 14px;
+    border-top: 1px solid var(--border);
+    color: #cbd5e1;
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(255,255,255,.02); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    background: rgba(59,130,246,.12);
+    color: var(--accent2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  pre {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin: 14px 0;
+    line-height: 1.65;
+    color: #a5f3fc;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    margin: 2px;
+  }
+  .badge.blue   { background: rgba(59,130,246,.2);  color: var(--accent); }
+  .badge.cyan   { background: rgba(34,211,238,.15); color: var(--accent2); }
+  .badge.purple { background: rgba(167,139,250,.15);color: var(--accent3); }
+  .badge.green  { background: rgba(52,211,153,.15); color: var(--success); }
+  .badge.yellow { background: rgba(245,158,11,.15); color: var(--warn); }
+  .badge.red    { background: rgba(248,113,113,.15); color: var(--danger); }
+
+  ul, ol {
+    padding-left: 22px;
+    margin: 10px 0;
+    color: #cbd5e1;
+  }
+  li { margin-bottom: 6px; }
+  li strong { color: var(--text); }
+
+  .osi-row {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .osi-row:last-child { border-bottom: none; }
+  .osi-num {
+    width: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: 800;
+    font-size: 1rem;
+    color: #fff;
+  }
+  .osi-name {
+    width: 140px;
+    flex-shrink: 0;
+    padding: 10px 12px;
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+  }
+  .osi-pdu {
+    width: 100px;
+    flex-shrink: 0;
+    padding: 10px 8px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--warn);
+    display: flex;
+    align-items: center;
+  }
+  .osi-desc {
+    flex: 1;
+    padding: 10px 12px;
+    color: #94a3b8;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(59,130,246,.08), rgba(34,211,238,.06));
+    border: 1px solid rgba(59,130,246,.25);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 16px 0;
+  }
+
+  @media (max-width: 900px) {
+    nav { display: none; }
+    main { padding: 24px 20px; }
+    .two-col { grid-template-columns: 1fr; }
+    header { padding: 24px 20px; }
+    header h1 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📡 Сүлжээний бүрэн лекцийн тэмдэглэл — Cisco ITN · SRWE · ENSA</h1>
+  <p>Бүх лекц · Бүх нарийн дэлгэрэнгүй · Аливаа шалгалтанд бэлэн</p>
+</header>
+
+<div class="layout">
+
+<!-- ────────── NAV ────────── -->
+<nav>
+  <div class="nav-module">ITN — Танилцуулга</div>
+  <a href="#m1">М1 · Сүлжээний өнөөдөр</a>
+  <a href="#m3">М3 · Протокол ба загварууд</a>
+  <a href="#m2">М2 · IOS тохиргоо</a>
+  <a href="#m4">М4 · Физик давхарга</a>
+  <a href="#m6">М6 · Өгөгдлийн холбооны давхарга</a>
+  <div class="nav-module">SRWE — Шилжүүлэлт</div>
+  <a href="#vlans">VLAN ба Тrunking</a>
+  <a href="#intervlan">VLAN хоорондын чиглүүлэлт</a>
+  <a href="#etherchannel">EtherChannel</a>
+  <a href="#switching">Шилжүүлэлтийн ойлголт</a>
+  <a href="#stp">STP ойлголт</a>
+  <div class="nav-module">ITN — Хаяглалт</div>
+  <a href="#eth-sw">Ethernet шилжүүлэлт</a>
+  <a href="#arp">ARP &amp; ND</a>
+  <a href="#ipv4">IPv4 хаяглалт</a>
+  <a href="#ipv6">IPv6 хаяглалт</a>
+  <a href="#icmp">ICMP</a>
+  <div class="nav-module">ENSA — Чиглүүлэлт</div>
+  <a href="#routing">Чиглүүлэлтийн ойлголт</a>
+  <a href="#static">Статик чиглүүлэлт</a>
+  <a href="#ospf">OSPF</a>
+  <a href="#nat">NAT (IPv4)</a>
+  <div class="nav-module">Тээвэр &amp; Програм</div>
+  <a href="#transport">Тээврийн давхарга</a>
+  <a href="#app">Програмын давхарга</a>
+  <a href="#acl">ACL ойлголт</a>
+</nav>
+
+<!-- ────────── MAIN ────────── -->
+<main>
+
+<!-- ═══════════════════════════ MODULE 1 ═══════════════════════════ -->
+<section class="module" id="m1">
+  <div class="module-header">
+    <div class="module-num">1</div>
+    <div class="module-title">
+      <h2>Сүлжээний өнөөдөр</h2>
+      <p>Сүлжээний үндэс, сүлжээний төрлүүд, аюулгүй байдал, чиг хандлагууд</p>
+    </div>
+  </div>
+
+  <h3>Сүлжээний бүрдэл хэсгүүд</h3>
+  <p>Сүлжээн дэх ямар ч компьютер нь <strong>хост</strong> буюу төгсгөлийн төхөөрөмж юм. Хостуудыг дараах байдлаар ангилна:</p>
+  <ul>
+    <li><strong>Сервер</strong> — нөөц хангадаг (веб сервер, имэйл сервер, файл сервер).</li>
+    <li><strong>Клиент</strong> — серверт хүсэлт илгээдэг (хөтөч, имэйл клиент).</li>
+    <li><strong>P2P (Үе тэнгийн-үе тэнгийн)</strong> — нэг төхөөрөмж хоёр үүрэг хавсарч гүйцэтгэнэ. Маш жижиг сүлжээнд л хэрэглэнэ. Сул тал: төвлөрсөн удирдлага байхгүй, аюулгүй бус, өргөтгөх боломжгүй.</li>
+  </ul>
+
+  <p><strong>Завсрын төхөөрөмжүүд (Intermediary devices):</strong> свитч, роутер, WAP, firewall. Тэдгээрийн үүрэг: дохиог сэргээх, чиглүүлэлтийн мэдээлэл хадгалах, алдааны талаар мэдэгдэх.</p>
+
+  <p><strong>Дамжуулах орчин (Network Media):</strong></p>
+  <table>
+    <tr><th>Төрөл</th><th>Дохио</th></tr>
+    <tr><td>Зэс кабель</td><td>Цахилгааны импульс</td></tr>
+    <tr><td>Шилэн кабель</td><td>Гэрлийн импульс</td></tr>
+    <tr><td>Утасгүй</td><td>Цахилгаан соронзон долгион</td></tr>
+  </table>
+
+  <h3>Топологийн төрлүүд</h3>
+  <ul>
+    <li><strong>Физик топологи</strong> — кабель, төхөөрөмжүүдийн бодит байршил.</li>
+    <li><strong>Логик топологи</strong> — виртуал холбоос, IP хаяг, интерфейсүүд.</li>
+  </ul>
+
+  <h3>Сүлжээний төрлүүд</h3>
+  <table>
+    <tr><th>Төрөл</th><th>Хамрах талбай</th><th>Онцлог</th></tr>
+    <tr><td><strong>LAN</strong> (Локал сүлжээ)</td><td>Жижиг</td><td>Нэг администратор, өндөр дамжуулах чадвар</td></tr>
+    <tr><td><strong>WAN</strong> (Өргөн талбайн сүлжээ)</td><td>Том</td><td>Олон провайдер, харьцангуй удаан суваг</td></tr>
+    <tr><td><strong>SOHO</strong></td><td>Гэрийн оффис</td><td>Жижиг сүлжээ → корпорацийн холболт</td></tr>
+  </table>
+
+  <h3>Интернэтэд холбогдох</h3>
+  <div class="two-col">
+    <div class="card info">
+      <div class="tip-label">🏠 Гэр / SOHO</div>
+      <ul>
+        <li>Кабелийн ТВ (Cable)</li>
+        <li>DSL — утасны шугамаар</li>
+        <li>Мобайл сүлжээ (Cellular)</li>
+        <li>Хиймэл дагуулын интернэт (Satellite)</li>
+        <li>Dial-up — хуучин, хямд, удаан</li>
+      </ul>
+    </div>
+    <div class="card info">
+      <div class="tip-label">🏢 Бизнесийн холболт</div>
+      <ul>
+        <li>Dedicated Leased Line — тусгай шугам</li>
+        <li>Ethernet WAN</li>
+        <li>Business DSL (SDSL)</li>
+        <li>Satellite</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Найдвартай сүлжээ — 4 шинж чанар</h3>
+  <div class="card success">
+    <div class="tip-label">✅ Дөрвөн тулгуур</div>
+    <ul>
+      <li><strong>Fault Tolerance</strong> — алдааг тэсвэрлэх чадвар: нэг зам унахад өгөгдөл нөгөөгөөр (packet switching) явна.</li>
+      <li><strong>Scalability</strong> — өргөтгөх чадвар: гүйцэтгэл буурахгүйгээр шинэ хэрэглэгч нэмэх боломжтой.</li>
+      <li><strong>QoS</strong> (Үйлчилгээний чанар) — дуу, видео тасалдалгүйн тулд тэргүүлэх ач холбогдол шаардана.</li>
+      <li><strong>Security</strong> — гурван зорилго: Нууцлал (Confidentiality), Бүрэн бүтэн байдал (Integrity), Хүртээмж (Availability) — CIA Triad.</li>
+    </ul>
+  </div>
+
+  <h3>Чиг хандлага ба технологи</h3>
+  <ul>
+    <li><strong>BYOD</strong> — Өөрийн төхөөрөмжийг авчрах: ажилтнууд өөрийн төхөөрөмж ашигладаг.</li>
+    <li><strong>Cloud Computing</strong> — 4 төрөл: Нийтийн, Хувийн, Эрлийз, Тусгай.</li>
+    <li><strong>Powerline Networking</strong> — өгөгдлийг цахилгааны утасаар дамжуулна.</li>
+    <li><strong>WISP</strong> — Утасгүй интернэт үйлчилгээ үзүүлэгч: хөдөөгийн нутагт хандалтын цэгүүд.</li>
+  </ul>
+
+  <h3>Аюулгүй байдлын заналхийлэл</h3>
+  <div class="two-col">
+    <div class="card danger">
+      <div class="tip-label">⚠️ Гадаад заналхийлэл</div>
+      <ul>
+        <li>Вирус, хорхой, троян</li>
+        <li>Spyware / Adware</li>
+        <li>Zero-day халдлага</li>
+        <li>DoS (Үйлчилгээ татгалзуулах)</li>
+        <li>Өгөгдөл таслан зогсоох / хувийн мэдээлэл хулгайлах</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <div class="tip-label">⚠️ Дотоод заналхийлэл</div>
+      <ul>
+        <li>Төхөөрөмж алдах / хулгайлуулах</li>
+        <li>Санамсаргүй буруу ашиглалт</li>
+        <li>Хорлонтой ажилтнууд</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card info">
+    <div class="tip-label">🔒 Том сүлжээний аюулгүй байдлын шийдэл</div>
+    <p>Антивирус, Антиспайвар, Firewall, <strong>ACL</strong> (Хандалт хянах жагсаалт), <strong>IPS</strong> (Халдлага урьдчилан сэргийлэх систем), <strong>VPN</strong> (Виртуал хувийн сүлжээ), Тусгай Firewall систем.</p>
+  </div>
+
+  <h3>Интранет ба Экстранет</h3>
+  <ul>
+    <li><strong>Intranet</strong> — байгууллагын дотоод сүлжээ, зөвхөн ажилтнуудад.</li>
+    <li><strong>Extranet</strong> — гадаад түншүүдэд (үйлчлүүлэгч, нийлүүлэгч) дотоод сүлжээний нэг хэсэгт хамгаалалттай хандалт олгодог.</li>
+  </ul>
+
+  <p>Интернэтийг удирддаг байгууллагууд: <strong>IETF, ICANN, IAB</strong>.</p>
+</section>
+
+<!-- ═══════════════════════════ MODULE 3 — Протокол ═══════════════════════════ -->
+<section class="module" id="m3">
+  <div class="module-header">
+    <div class="module-num">3</div>
+    <div class="module-title">
+      <h2>Протокол ба Загварууд</h2>
+      <p>OSI, TCP/IP, инкапсуляци, PDU, хаяглалт</p>
+    </div>
+  </div>
+
+  <h3>Харилцааны элементүүд</h3>
+  <p>Аливаа харилцаа гурван элементтэй: <strong>илгээгч (sender)</strong>, <strong>хүлээн авагч (receiver)</strong>, <strong>суваг (media)</strong>.</p>
+  <p>Протоколууд тодорхойлно: илгээгч/хүлээн авагчийг таних, нийтлэг хэл, хурд ба цаг хугацаа, хүлээн авсан эсэхийн баталгаа.</p>
+
+  <h3>Мессеж хүргэх арга</h3>
+  <ul>
+    <li><strong>Unicast</strong> — нэгээс нэгд.</li>
+    <li><strong>Multicast</strong> — нэгээс олонд (бүгдэд биш).</li>
+    <li><strong>Broadcast</strong> — нэгээс бүгдэд. <em>Зөвхөн IPv4 — IPv6 broadcast ашиглахгүй!</em></li>
+    <li><strong>Anycast</strong> — IPv6-д шинэ төрөл: бүлгийн хамгийн ойр гишүүнд хүргэнэ.</li>
+  </ul>
+
+  <h3>OSI загвар — 7 давхарга</h3>
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div class="osi-row" style="background: rgba(248,113,113,.08);">
+      <div class="osi-num" style="background:rgba(248,113,113,.3);color:#f87171;">7</div>
+      <div class="osi-name">Програм</div>
+      <div class="osi-pdu">Өгөгдөл</div>
+      <div class="osi-desc">Процесс хоорондын протоколууд: HTTP, DNS, SMTP, FTP</div>
+    </div>
+    <div class="osi-row" style="background: rgba(245,158,11,.06);">
+      <div class="osi-num" style="background:rgba(245,158,11,.3);color:#f59e0b;">6</div>
+      <div class="osi-name">Танилцуулга</div>
+      <div class="osi-pdu">Өгөгдөл</div>
+      <div class="osi-desc">Форматлах, шахах, шифрлэх/тайлах</div>
+    </div>
+    <div class="osi-row" style="background: rgba(245,158,11,.04);">
+      <div class="osi-num" style="background:rgba(245,158,11,.2);color:#f59e0b;">5</div>
+      <div class="osi-name">Сессий</div>
+      <div class="osi-pdu">Өгөгдөл</div>
+      <div class="osi-desc">Харилцан яриа, сессийг удирдах</div>
+    </div>
+    <div class="osi-row" style="background: rgba(52,211,153,.05);">
+      <div class="osi-num" style="background:rgba(52,211,153,.25);color:#34d399;">4</div>
+      <div class="osi-name">Тээвэр</div>
+      <div class="osi-pdu">Сегмент</div>
+      <div class="osi-desc">TCP, UDP: сегментчлэл, найдвартай байдал, урсгал удирдлага</div>
+    </div>
+    <div class="osi-row" style="background: rgba(59,130,246,.06);">
+      <div class="osi-num" style="background:rgba(59,130,246,.3);color:#3b82f6;">3</div>
+      <div class="osi-name">Сүлжээ</div>
+      <div class="osi-pdu">Пакет</div>
+      <div class="osi-desc">IP: логик хаяглалт, чиглүүлэлт</div>
+    </div>
+    <div class="osi-row" style="background: rgba(167,139,250,.05);">
+      <div class="osi-num" style="background:rgba(167,139,250,.25);color:#a78bfa;">2</div>
+      <div class="osi-name">Өгөгдлийн холбоо</div>
+      <div class="osi-pdu">Фрейм</div>
+      <div class="osi-desc">MAC хаяглалт, орчинд хандах, алдаа илрүүлэх</div>
+    </div>
+    <div class="osi-row" style="background: rgba(34,211,238,.04);">
+      <div class="osi-num" style="background:rgba(34,211,238,.2);color:#22d3ee;">1</div>
+      <div class="osi-name">Физик</div>
+      <div class="osi-pdu">Бит</div>
+      <div class="osi-desc">Кабель, дохио, физик орчин дахь битүүд</div>
+    </div>
+  </div>
+
+  <h3>TCP/IP загвар — 4 давхарга</h3>
+  <table>
+    <tr><th>TCP/IP давхарга</th><th>OSI-тай харгалзуулах</th><th>Тайлбар</th></tr>
+    <tr><td><strong>Програм</strong></td><td>7, 6, 5</td><td>HTTP, DNS, DHCP, FTP, SMTP</td></tr>
+    <tr><td><strong>Тээвэр</strong></td><td>4</td><td>TCP (6), UDP (17)</td></tr>
+    <tr><td><strong>Интернэт</strong></td><td>3</td><td>IP, ICMP, ARP</td></tr>
+    <tr><td><strong>Сүлжээ хандах</strong></td><td>2, 1</td><td>Ethernet, Wi-Fi, MAC</td></tr>
+  </table>
+
+  <h3>Инкапсуляци ба PDU</h3>
+  <p>Стекээр доош шилжих үед өгөгдөл шинэ нэр авна:</p>
+  <div class="highlight-box">
+    <p style="font-family: var(--mono); color: #a5f3fc; line-height: 2;">
+      Програм → <strong style="color: #f59e0b;">Өгөгдөл</strong><br>
+      Тээвэр → <strong style="color: #34d399;">Сегмент</strong> (TCP/UDP толгой нэмэгдэнэ)<br>
+      Сүлжээ → <strong style="color: #60a5fa;">Пакет</strong> (IP толгой нэмэгдэнэ)<br>
+      Өгөгдлийн холбоо → <strong style="color: #a78bfa;">Фрейм</strong> (MAC толгой + FCS нэмэгдэнэ)<br>
+      Физик → <strong style="color: #22d3ee;">Битүүд</strong> (физик орчин дахь битүүд)
+    </p>
+  </div>
+
+  <p>Де-инкапсуляци — урвуу процесс: бит → фрейм → пакет → сегмент → өгөгдөл.</p>
+
+  <h3>Хаяглалт: L3 ба L2</h3>
+  <ul>
+    <li><strong>IP хаяг (L3)</strong> — логик, глобал, хоп болгонд өөрчлөгдөхгүй.</li>
+    <li><strong>MAC хаяг (L2)</strong> — физик, локал, хоп болгонд өөрчлөгдөнө (холбоос-холбоос хооронд).</li>
+  </ul>
+  <div class="card warn">
+    <div class="tip-label">⚡ Чухал баримт</div>
+    <p>IP эх ба очих хаяг нь хостоос хост хүрэх бүхэл замд ӨӨРЧЛӨГДӨХГҮЙ. MAC хаяг роутер болгонд өөрчлөгдөнө (хоп болгонд шинэ MAC src/dst ашигладаг).</p>
+  </div>
+
+  <h3>Стандарт байгууллагууд</h3>
+  <table>
+    <tr><th>Байгууллага</th><th>Үүрэг</th></tr>
+    <tr><td><strong>IETF</strong></td><td>TCP/IP стандарт боловсруулах (RFC)</td></tr>
+    <tr><td><strong>ICANN</strong></td><td>IP хаяг, домэйн нэр удирдах</td></tr>
+    <tr><td><strong>IANA</strong></td><td>ICANN-д зориулж IP хаяг, протоколын дугаар олгох</td></tr>
+    <tr><td><strong>IEEE</strong></td><td>Ethernet, Wi-Fi стандарт (802.x)</td></tr>
+    <tr><td><strong>TIA/EIA</strong></td><td>Кабелийн стандарт (UTP, RJ-45, T568A/B)</td></tr>
+    <tr><td><strong>ITU-T</strong></td><td>DSL, видео шахалт, IPTV</td></tr>
+    <tr><td><strong>ISOC</strong></td><td>Нээлттэй интернэтийг дэмжих</td></tr>
+    <tr><td><strong>IAB</strong></td><td>Интернэт стандарт удирдах, хөгжүүлэх</td></tr>
+  </table>
+
+  <h3>Протоколын стекүүд</h3>
+  <ul>
+    <li><strong>TCP/IP</strong> — интернэтийн үндсэн стек, IETF дэмждэг, нээлттэй стандарт.</li>
+    <li><strong>OSI</strong> — ISO, ITU боловсруулсан, лавлагааны загвар болгон хэрэглэнэ.</li>
+    <li><strong>AppleTalk</strong> — Apple-ийн өмчийн (хуучирсан).</li>
+    <li><strong>Novell NetWare</strong> — Novell-ийн өмчийн (хуучирсан).</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════ MODULE 2 — IOS ═══════════════════════════ -->
+<section class="module" id="m2">
+  <div class="module-header">
+    <div class="module-num">2</div>
+    <div class="module-title">
+      <h2>IOS үндсэн тохиргоо</h2>
+      <p>CLI горимууд, командууд, төхөөрөмж тохиргоо</p>
+    </div>
+  </div>
+
+  <h3>IOS хандалтын горимууд</h3>
+  <table>
+    <tr><th>Горим</th><th>Урамшуулал</th><th>Хандалт</th></tr>
+    <tr><td>User EXEC</td><td><code>Switch&gt;</code></td><td>Үндсэн мониторинг, хязгаарлагдмал</td></tr>
+    <tr><td>Privileged EXEC</td><td><code>Switch#</code></td><td>Бүх команд, бүрэн хандалт. Орох: <code>enable</code></td></tr>
+    <tr><td>Global Config</td><td><code>Switch(config)#</code></td><td>Глобал тохиргоо. Орох: <code>configure terminal</code></td></tr>
+    <tr><td>Line Config</td><td><code>Switch(config-line)#</code></td><td>Консол, SSH, Telnet</td></tr>
+    <tr><td>Interface Config</td><td><code>Switch(config-if)#</code></td><td>Тодорхой порт эсвэл интерфейс</td></tr>
+  </table>
+
+  <h3>Холболтын арга</h3>
+  <ul>
+    <li><strong>Console</strong> — физик порт, анхны тохиргоонд хэрэглэнэ. Сүлжээний холболт шаардахгүй.</li>
+    <li><strong>SSH</strong> — аюулгүй алсын холболт (шифрлэгдсэн). <em>Алсын хандалтад зөвлөмжтэй.</em></li>
+    <li><strong>Telnet</strong> — аюулгүй бус алсын холболт (нууц үг зэрэг бүх зүйл тодорхой текстээр илгээгдэнэ).</li>
+  </ul>
+
+  <h3>IOS товчлуурын товчлолууд</h3>
+  <table>
+    <tr><th>Товчлуур</th><th>Үйлдэл</th></tr>
+    <tr><td><code>Tab</code></td><td>Командын автоматаар дуусгах</td></tr>
+    <tr><td><code>↑ / Ctrl+P</code></td><td>Түүхэнд байгаа өмнөх команд</td></tr>
+    <tr><td><code>Ctrl+C</code></td><td>Тохиргооны горимоос → Privileged EXEC-т гарах</td></tr>
+    <tr><td><code>Ctrl+Z</code></td><td>Ижил (Privileged EXEC-т гарах)</td></tr>
+    <tr><td><code>Ctrl+Shift+6</code></td><td>DNS хайлт, traceroute, ping-г тасалдуулах</td></tr>
+    <tr><td><code>end</code></td><td>Дурын sub-config-с Privileged EXEC-т гарах</td></tr>
+  </table>
+
+  <h3>Тохиргооны файлууд</h3>
+  <div class="two-col">
+    <div class="card warn">
+      <div class="tip-label">💾 startup-config</div>
+      <p><strong>NVRAM</strong>-д хадгалагдана (тэжээлгүйд хадгалагддаг санах ой). Асахад ачааллана. Унтраахад устахгүй.</p>
+    </div>
+    <div class="card info">
+      <div class="tip-label">⚡ running-config</div>
+      <p><strong>RAM</strong>-д хадгалагдана (санамсаргүй санах ой). Одоогийн тохиргоо. <em>Унтраахад устана!</em></p>
+    </div>
+  </div>
+  <pre>! Одоогийн тохиргоог хадгалах:
+Switch# copy running-config startup-config
+
+! Тохиргоог устгах:
+Switch# erase startup-config
+Switch# reload
+
+! Бүх нууц үгийг шифрлэх:
+Switch(config)# service password-encryption
+
+! MOTD баннер:
+Switch(config)# banner motd # Зөвшөөрөлгүй хандалт хориглоно! #</pre>
+
+  <h3>Нууц үгийн тохиргоо</h3>
+  <pre>! Privileged EXEC-д зориулсан нууц үг (шифрлэгдсэн — ҮРГЭЛЖ ИЙМ ХЭРЭГЛЭ):
+Switch(config)# enable secret class
+
+! Консолын нууц үг:
+Switch(config)# line console 0
+Switch(config-line)# password cisco
+Switch(config-line)# login
+
+! Telnet/SSH нууц үг (VTY шугам 0-15):
+Switch(config)# line vty 0 15
+Switch(config-line)# password cisco
+Switch(config-line)# login</pre>
+
+  <div class="card danger">
+    <div class="tip-label">⚠️ Чухал</div>
+    <p>Хоёулаа тохируулсан бол <code>enable secret</code> нь <code>enable password</code>-г үргэлж дарна. <code>enable secret</code> MD5 хэш хэлбэрээр, <code>enable password</code> тодорхой текстээр (<code>service password-encryption</code> идэвхжүүлэхгүй бол) хадгалагдана.</p>
+  </div>
+
+  <h3>IPv4 SVI тохиргоо (Switch Virtual Interface)</h3>
+  <pre>Switch(config)# interface vlan 1
+Switch(config-if)# ip address 192.168.1.10 255.255.255.0
+Switch(config-if)# no shutdown
+Switch(config-if)# exit
+Switch(config)# ip default-gateway 192.168.1.1</pre>
+
+  <h3>Төхөөрөмжийн нэр</h3>
+  <p>Нэрлэлтийн дүрэм: үсгээр эхлэх, зай агуулахгүй, 64 тэмдэгтээс бага, зөвхөн үсэг/тоо/зураас.</p>
+  <pre>Switch(config)# hostname SW-Floor-1</pre>
+</section>
+
+<!-- ═══════════════════════════ MODULE 4 — Физик ═══════════════════════════ -->
+<section class="module" id="m4">
+  <div class="module-header">
+    <div class="module-num">4</div>
+    <div class="module-title">
+      <h2>Физик давхарга</h2>
+      <p>Кабель, кодлол, дамжуулах чадвар</p>
+    </div>
+  </div>
+
+  <h3>Физик давхаргын үүрэг</h3>
+  <p>Физик давхарга нь Data Link-ийн фреймийг хүлээн аваад орчинд дамжуулахаар дохионы цуврал болгон кодолно. Гурван функциональ хэсэг: <strong>Физик бүрэлдэхүүн</strong> (тоног төхөөрөмж), <strong>Кодлол</strong>, <strong>Дохиологоо</strong>.</p>
+
+  <h3>Зурваасын өргөн (Bandwidth)</h3>
+  <table>
+    <tr><th>Нэгж</th><th>Тэмдэглэгээ</th><th>Утга</th></tr>
+    <tr><td>Бит/секунд</td><td>bps</td><td>Үндсэн нэгж</td></tr>
+    <tr><td>Килобит/секунд</td><td>Kbps</td><td>1 000 bps = 10³</td></tr>
+    <tr><td>Мегабит/секунд</td><td>Mbps</td><td>1 000 000 bps = 10⁶</td></tr>
+    <tr><td>Гигабит/секунд</td><td>Gbps</td><td>10⁹ bps</td></tr>
+    <tr><td>Терабит/секунд</td><td>Tbps</td><td>10¹² bps</td></tr>
+  </table>
+
+  <div class="highlight-box">
+    <h4>Зурваасын өргөний нэр томьёо</h4>
+    <ul>
+      <li><strong>Latency</strong> — хоцролт: A-с B хүрэх хугацаа.</li>
+      <li><strong>Throughput</strong> — дамжуулах чадвар: хугацааны туршид бодитоор дамжуулсан битийн хэмжээ.</li>
+      <li><strong>Goodput</strong> = Throughput − нэмэлт ачаалал (үйлчилгээний трафик). Хэрэгтэй хурд.</li>
+    </ul>
+  </div>
+
+  <h3>Зэс кабель</h3>
+  <p>Хамгийн өргөн тархсан төрөл. Хямд, суурилуулахад амархан. Хязгаарлалт: зайнаас хамааран дохио <strong>сулрах (attenuation)</strong>, <strong>EMI/RFI</strong> болон <strong>харилцан алдагдал (crosstalk)</strong> хөндлөнгийн нөлөө.</p>
+
+  <h4>UTP — Хамгаалалтгүй мушгисан хос</h4>
+  <ul>
+    <li>Хамгийн түгээмэл сүлжээний кабель. Залгуур: <strong>RJ-45</strong>.</li>
+    <li>4 мушгисан хос, өнгийн тусгаарлалт. Хамгаалалтгүй — хөндлөнгийн нөлөөтэй тэмцэхийн тулд мушгисны физикт тулгуурладаг.</li>
+    <li>Стандартыг <strong>TIA/EIA</strong> (TIA/EIA-568) тогтоодог, цахилгааны шинж чанарыг <strong>IEEE</strong> тогтоодог.</li>
+  </ul>
+
+  <table>
+    <tr><th>Ангилал</th><th>Хурд</th><th>Хэрэглээ</th></tr>
+    <tr><td>Cat 3</td><td>10 Mbps</td><td>Утасны холбоо, хуучин Ethernet</td></tr>
+    <tr><td>Cat 5</td><td>100 Mbps</td><td>Fast Ethernet</td></tr>
+    <tr><td>Cat 5e</td><td>1 Gbps</td><td>Гигабит Ethernet</td></tr>
+    <tr><td>Cat 6</td><td>1–10 Gbps</td><td>Gigabit/10G Ethernet (богино зай)</td></tr>
+  </table>
+
+  <h4>UTP кабелийн төрлүүд</h4>
+  <table>
+    <tr><th>Төрөл</th><th>Стандарт</th><th>Хэрэглээ</th></tr>
+    <tr><td><strong>Straight-through</strong></td><td>Хоёр үзүүр T568A эсвэл хоёулаа T568B</td><td>Хост → Свитч, Хост → Роутер</td></tr>
+    <tr><td><strong>Crossover</strong></td><td>Нэг үзүүр T568A, нөгөө T568B</td><td>Хост→Хост, Свитч→Свитч, Роутер→Роутер</td></tr>
+    <tr><td><strong>Rollover</strong></td><td>Cisco өмчийн</td><td>PC (Серийн порт) → Свитч/роутерийн консол порт</td></tr>
+  </table>
+  <div class="card info">
+    <div class="tip-label">ℹ️ Auto-MDIX</div>
+    <p>Орчин үеийн NIC-ийн ихэнх нь <strong>Auto-MDIX</strong> — кабелийн төрлийг автоматаар таних функцтэй. Crossover кабелийг хуучирсан (legacy) гэж үздэг.</p>
+  </div>
+
+  <h4>STP — Хамгаалагдсан мушгисан хос</h4>
+  <p>EMI/RFI-ийн эсрэг сайн хамгаалдаг, гэхдээ үнэтэй бөгөөд суурилуулахад хэцүү. Мөн RJ-45 ашигладаг.</p>
+
+  <h4>Коаксиаль кабель</h4>
+  <p>Утасгүй төхөөрөмжид антен холбоход болон кабелийн интернэтэд хэрэглэнэ. 4 давхарга: зэс дамжуулагч → уян хатан хуванцар тусгаарлалт → зэсийн нэхмэл (экран) → гадна бүрхэвч.</p>
+
+  <h3>Шилэн кабель</h3>
+  <p>Өгөгдлийг урт зайд, өндөр хурдаар дамжуулдаг. EMI/RFI-д бүрэн тэсвэртэй. Нимгэн шилэн торноос хийгдсэн. Лазер эсвэл LED ашигладаг.</p>
+
+  <div class="two-col">
+    <div class="card info">
+      <div class="tip-label">Нэг горим (SMF)</div>
+      <ul>
+        <li>Маш нарийн цөм</li>
+        <li>Үнэтэй <strong>лазер</strong> ашигладаг</li>
+        <li><strong>Урт зайд</strong></li>
+        <li>Бүрхэвчийн өнгө: <strong>Шар</strong></li>
+      </ul>
+    </div>
+    <div class="card success">
+      <div class="tip-label">Олон горим (MMF)</div>
+      <ul>
+        <li>Том цөм</li>
+        <li><strong>LED</strong> ашигладаг (хямд)</li>
+        <li><strong>550 м</strong> хүртэл, <strong>10 Gbps</strong> хүртэл</li>
+        <li>Бүрхэвчийн өнгө: <strong>Улбар шар эсвэл аква</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <h4>Шилэн кабелийн залгуурууд</h4>
+  <table>
+    <tr><th>Төрөл</th><th>Тайлбар</th></tr>
+    <tr><td><strong>ST</strong> (Шулуун үзүүр)</td><td>Байонет түгжээ, дугуй</td></tr>
+    <tr><td><strong>SC</strong> (Захиалагчийн залгуур)</td><td>Дөрвөлжин, push-pull</td></tr>
+    <tr><td><strong>LC</strong> (Lucent залгуур)</td><td>Жижиг, дата төвд түгээмэл</td></tr>
+    <tr><td><strong>Duplex LC</strong></td><td>Хоёр LC хамт (TX + RX)</td></tr>
+  </table>
+
+  <h3>Утасгүй стандартууд</h3>
+  <table>
+    <tr><th>IEEE стандарт</th><th>Технологи</th><th>Төрөл</th></tr>
+    <tr><td><strong>802.11</strong></td><td>Wi-Fi</td><td>WLAN</td></tr>
+    <tr><td><strong>802.15</strong></td><td>Bluetooth</td><td>WPAN</td></tr>
+    <tr><td><strong>802.16</strong></td><td>WiMAX</td><td>Өргөн зурваасын утасгүй хандалт</td></tr>
+    <tr><td><strong>802.15.4</strong></td><td>Zigbee</td><td>Бага хурд, бага хэрэглээ (IoT)</td></tr>
+  </table>
+  <p>WLAN нь <strong>хагас дуплекс</strong> горимд ажилладаг: нэг цагт зөвхөн нэг төхөөрөмж дамжуулна эсвэл хүлээн авна. Мөргөлдөөнөөс урьдчилан сэргийлэхийн тулд <strong>CSMA/CA</strong> ашигладаг.</p>
+</section>
+
+<!-- ═══════════════════════════ MODULE 6 — Өгөгдлийн холбоо ═══════════════════════════ -->
+<section class="module" id="m6">
+  <div class="module-header">
+    <div class="module-num">6</div>
+    <div class="module-title">
+      <h2>Өгөгдлийн холбооны давхарга</h2>
+      <p>MAC, LLC, CSMA/CD, CSMA/CA, фреймүүд</p>
+    </div>
+  </div>
+
+  <h3>Өгөгдлийн холбооны 2 дэд давхарга</h3>
+  <div class="two-col">
+    <div class="card info">
+      <div class="tip-label">LLC — Логик холбооны удирдлага</div>
+      <p>Дээд давхаргуудтай харилцана. Ямар сүлжээний давхаргын протокол хэрэглэгдэж байгааг тодорхойлно (IPv4 эсвэл IPv6).</p>
+    </div>
+    <div class="card success">
+      <div class="tip-label">MAC — Орчинд хандах удирдлага</div>
+      <p>Өгөгдлийн инкапсуляци, орчинд хандах удирдлага, алдаа илрүүлэх (FCS).</p>
+    </div>
+  </div>
+
+  <h3>Топологиуд</h3>
+  <ul>
+    <li><strong>Point-to-point WAN</strong> — хоёр зангилаа, хамгийн энгийн. Мөргөлдөөн байхгүй.</li>
+    <li><strong>Hub and Spoke WAN</strong> — төв сайт, туяа холболт.</li>
+    <li><strong>Mesh WAN</strong> — бүгдийн бүгдтэй, өндөр хүртээмжтэй ч үнэтэй.</li>
+    <li><strong>Star LAN</strong> — бүгд төв свитчээр дамжуулан (хамгийн түгээмэл).</li>
+    <li><strong>Bus LAN</strong> — бүгд нэг кабель дээр (хуучирсан).</li>
+    <li><strong>Ring LAN</strong> — төхөөрөмж болгон хөршүүдтэйгээ холбогдсон (хуучирсан Token Ring).</li>
+  </ul>
+
+  <h3>Дуплекс</h3>
+  <ul>
+    <li><strong>Хагас дуплекс</strong> — нэг цагт зөвхөн нэг төхөөрөмж дамжуулна. WLAN болон хуучин хаб сүлжээнд хэрэглэнэ. Мөргөлдөөн боломжтой.</li>
+    <li><strong>Бүрэн дуплекс</strong> — хоёр төхөөрөмж нэгэн зэрэг дамжуулж болно. Ethernet свитчүүд бүрэн дуплексээр ажилладаг. Мөргөлдөөн байхгүй.</li>
+  </ul>
+
+  <h3>Орчинд хандах удирдлагын арга</h3>
+  <div class="two-col">
+    <div class="card warn">
+      <div class="tip-label">CSMA/CD — Мөргөлдөөн илрүүлэх</div>
+      <p>Хуучин Ethernet (хабтай) хэрэглэнэ. Хагас дуплекс. Мөргөлдөөн үед: төхөөрөмжүүд илрүүлж, санамсаргүй хугацаа хүлээгээд дахин дамжуулна.</p>
+    </div>
+    <div class="card info">
+      <div class="tip-label">CSMA/CA — Мөргөлдөөнөөс зайлсхийх</div>
+      <p><strong>Wi-Fi (802.11)</strong>-д хэрэглэнэ. Хагас дуплекс. Дамжуулах хугацаанд орчныг захиална, бусад хэдий хүлээхийг мэднэ. Мөргөлдөөнийг урьдчилан сэргийлдэг.</p>
+    </div>
+  </div>
+
+  <h3>Өгөгдлийн холбооны фреймийн бүтэц</h3>
+  <table>
+    <tr><th>Талбар</th><th>Тайлбар</th></tr>
+    <tr><td>Фрейм эхлэл/төгсгөл</td><td>Фреймийн эхлэл ба төгсгөлийн тугнууд</td></tr>
+    <tr><td>Хаяглалт</td><td>Эх ба очих MAC хаяг</td></tr>
+    <tr><td>Төрөл</td><td>Ямар L3 протокол (IPv4 = 0x0800, IPv6 = 0x86DD, ARP = 0x0806)</td></tr>
+    <tr><td>Удирдлага</td><td>Урсгал удирдлага</td></tr>
+    <tr><td>Өгөгдөл</td><td>Ачааллын өгөгдөл (payload)</td></tr>
+    <tr><td>Алдаа илрүүлэх (FCS)</td><td>Фреймийн шалгах дараалал — CRC алдаа илрүүлэх</td></tr>
+  </table>
+
+  <div class="card warn">
+    <div class="tip-label">⚡ Чухал баримт</div>
+    <p>MAC хаяг — <strong>локал</strong>. Хоп болгонд өгөгдлийн холбооны эх ба очих хаяг өөрчлөгдөнө. IP хаяг хэвээрээ байна.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ VLANS ═══════════════════════════ -->
+<section class="module" id="vlans">
+  <div class="module-header">
+    <div class="module-num">V</div>
+    <div class="module-title">
+      <h2>VLAN ба Trunking</h2>
+      <p>Логик сегментчлэл, 802.1Q, DTP</p>
+    </div>
+  </div>
+
+  <h3>VLAN гэж юу вэ</h3>
+  <p>VLAN — нэг свитч дотор сүлжээг логикоор хуваах. Өөр VLAN-д байгаа төхөөрөмжүүд роутер эсвэл L3 свитчгүйгээр харилцаж чадахгүй.</p>
+  <p><strong>Давуу талууд:</strong> broadcast домэйн жижгэрнэ, аюулгүй байдал сайжирна, удирдлага уян хатан болно, зардал буурна.</p>
+
+  <h3>VLAN-ийн төрлүүд</h3>
+  <table>
+    <tr><th>Төрөл</th><th>Тайлбар</th></tr>
+    <tr><td><strong>Default VLAN</strong></td><td>VLAN 1 — анхдагчаар бүх порт. Устгах эсвэл нэрийг өөрчлөх боломжгүй!</td></tr>
+    <tr><td><strong>Data VLAN</strong></td><td>Хэрэглэгчийн трафикт</td></tr>
+    <tr><td><strong>Native VLAN</strong></td><td>Транк дээр тэмдэглэгдэхгүй трафик. Анхдагч нь VLAN 1</td></tr>
+    <tr><td><strong>Management VLAN</strong></td><td>Свитч рүү SSH/Telnet хандалт. Ихэвчлэн SVI VLAN</td></tr>
+    <tr><td><strong>Voice VLAN</strong></td><td>VoIP-д: баталгаатай зурваас, QoS, хоцролт &lt;150 мс шаарддаг</td></tr>
+  </table>
+
+  <h3>VLAN-ийн мужууд</h3>
+  <div class="two-col">
+    <div class="card info">
+      <div class="tip-label">Ердийн муж: 1–1005</div>
+      <p>Жижиг, дунд байгууллагуудад. <strong>vlan.dat</strong>-д (флэш) хадгалагдана. VLAN 1, 1002–1005 автоматаар үүсч, устгах боломжгүй. VTP синхрончилдаг.</p>
+    </div>
+    <div class="card warn">
+      <div class="tip-label">Өргөтгөсөн муж: 1006–4094</div>
+      <p>Үйлчилгээ үзүүлэгчдэд. <strong>running-config</strong>-д хадгалагдана. VLAN функц багатай. VTP тохиргоо шаарддаг.</p>
+    </div>
+  </div>
+
+  <h3>VLAN тохиргооны командууд</h3>
+  <pre>! VLAN үүсгэх:
+SW(config)# vlan 20
+SW(config-vlan)# name STUDENTS
+SW(config-vlan)# end
+
+! Портыг VLAN-д хуваарилах:
+SW(config)# interface fa0/18
+SW(config-if)# switchport mode access
+SW(config-if)# switchport access vlan 20
+SW(config-if)# end
+
+! Шалгах:
+SW# show vlan brief
+SW# show interfaces fa0/18 switchport
+
+! VLAN устгах:
+SW(config)# no vlan 20
+! АНХААРУУЛГА: эхлээд портуудыг дахин хуваарил!
+
+! Бүх VLAN устгах:
+SW# delete vlan.dat
+SW# reload</pre>
+
+  <h3>802.1Q тэмдэглэлт</h3>
+  <p>802.1Q тэг нь VLAN мэдээллийг транкоор дамжуулахын тулд Ethernet фреймд нэмэгддэг.</p>
+  <div class="highlight-box">
+    <ul>
+      <li><strong>Тэгийн хэмжээ:</strong> <code>4 байт</code></li>
+      <li><strong>TPID</strong> (Тэгийн протоколын ID): <code>0x8100</code> — 2 байт, энэ нь 802.1Q тэг гэдгийг заана</li>
+      <li><strong>User Priority</strong>: 3 бит — QoS-д (CoS)</li>
+      <li><strong>CFI</strong> (Каноник форматын таних тэмдэг): 1 бит — Token Ring фреймийн дэмжлэг</li>
+      <li><strong>VID</strong> (VLAN ID): <strong>12 бит</strong> → <strong>4096 VLAN</strong> хүртэл дэмжнэ (2¹²)</li>
+    </ul>
+  </div>
+  <div class="card warn">
+    <div class="tip-label">⚠️ Native VLAN</div>
+    <p>Native VLAN-ийн трафик транкоор <strong>тэмдэглэгдэхгүйгээр</strong> дамжина. Транкын хоёр үзүүр ижил Native VLAN-тай байх ёстой. Анхдагч нь VLAN 1.</p>
+  </div>
+
+  <h3>Транк тохиргоо</h3>
+  <pre>SW(config)# interface fa0/1
+SW(config-if)# switchport mode trunk
+SW(config-if)# switchport trunk native vlan 99
+SW(config-if)# switchport trunk allowed vlan 10,20,30,99
+SW(config-if)# end
+
+SW# show interfaces fa0/1 trunk</pre>
+
+  <h3>DTP — Динамик транкийн протокол</h3>
+  <p>Cisco-ийн өмчийн протокол. Холболтын төрлийг (транк/хандалт) автоматаар тохирдог. Catalyst 2960/2950 дээр анхдагчаар идэвхтэй. Идэвхгүй болгох: <code>switchport nonegotiate</code>.</p>
+
+  <table>
+    <tr><th>Горим</th><th>Тайлбар</th></tr>
+    <tr><td><code>access</code></td><td>Байнгын хандалтын порт</td></tr>
+    <tr><td><code>dynamic auto</code></td><td><strong>2960-д анхдагч.</strong> Зөвхөн хөрш нь транк эсвэл desirable бол транк болно</td></tr>
+    <tr><td><code>dynamic desirable</code></td><td>Идэвхтэйгээр транк болохыг хичээнэ</td></tr>
+    <tr><td><code>trunk</code></td><td>Байнгын транк</td></tr>
+  </table>
+
+  <div class="card info">
+    <div class="tip-label">📊 DTP матриц: хэзээ транк үүсдэг вэ?</div>
+    <table>
+      <tr><th></th><th>dynamic auto</th><th>dynamic desirable</th><th>trunk</th><th>access</th></tr>
+      <tr><td><strong>dynamic auto</strong></td><td>access ❌</td><td>trunk ✅</td><td>trunk ✅</td><td>access ❌</td></tr>
+      <tr><td><strong>dynamic desirable</strong></td><td>trunk ✅</td><td>trunk ✅</td><td>trunk ✅</td><td>access ❌</td></tr>
+      <tr><td><strong>trunk</strong></td><td>trunk ✅</td><td>trunk ✅</td><td>trunk ✅</td><td>хязгаарлагдмал ⚠️</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ INTER-VLAN ═══════════════════════════ -->
+<section class="module" id="intervlan">
+  <div class="module-header">
+    <div class="module-num">IV</div>
+    <div class="module-title">
+      <h2>VLAN хоорондын чиглүүлэлт</h2>
+      <p>VLAN хооронд чиглүүлэх 3 арга</p>
+    </div>
+  </div>
+
+  <h3>VLAN хоорондын чиглүүлэлтийн аргууд</h3>
+  <table>
+    <tr><th>Арга</th><th>Тайлбар</th><th>Өргөтгөх чадвар</th></tr>
+    <tr><td>Хуучин (устгагдсан)</td><td>VLAN болгонд роутерийн физик порт</td><td>❌ Муу — портын тооны хязгаар</td></tr>
+    <tr><td><strong>Router-on-a-Stick</strong></td><td>Нэг физик порт, логик дэд интерфейсүүд</td><td>⚠️ ~50 VLAN хүртэл</td></tr>
+    <tr><td><strong>3-р давхаргын свитч (SVI)</strong></td><td>L3 свитч дээр SVI интерфейс</td><td>✅ Корпорацийн хамгийн сайн арга</td></tr>
+  </table>
+
+  <h3>Router-on-a-Stick</h3>
+  <pre>! Роутер дээр:
+R1(config)# interface g0/0/1.10
+R1(config-subif)# encapsulation dot1q 10
+R1(config-subif)# ip address 192.168.10.1 255.255.255.0
+
+R1(config)# interface g0/0/1.20
+R1(config-subif)# encapsulation dot1q 20
+R1(config-subif)# ip address 192.168.20.1 255.255.255.0
+
+R1(config)# interface g0/0/1.99
+R1(config-subif)# encapsulation dot1q 99 native   ! ← native VLAN
+R1(config-subif)# ip address 192.168.99.1 255.255.255.0
+
+R1(config)# interface g0/0/1
+R1(config-if)# no shutdown   ! ← Физик портыг заавал идэвхжүүл!</pre>
+
+  <h3>SVI-тай 3-р давхаргын свитч</h3>
+  <pre>! L3 свитч дээр:
+D1(config)# vlan 10
+D1(config)# vlan 20
+D1(config)# interface vlan 10
+D1(config-if)# ip address 192.168.10.1 255.255.255.0
+D1(config-if)# no shutdown
+D1(config)# interface vlan 20
+D1(config-if)# ip address 192.168.20.1 255.255.255.0
+D1(config-if)# no shutdown
+
+! L3 свитч дээр IP чиглүүлэлт идэвхжүүлэх:
+D1(config)# ip routing   ! ← Гол команд!</pre>
+
+  <div class="card success">
+    <div class="tip-label">✅ 3-р давхаргын свитчийн давуу тал</div>
+    <ul>
+      <li>Тоног төхөөрөмжийн хурд (hardware switching) — роутероос хурдан</li>
+      <li>Роутер рүү гадна кабель байхгүй</li>
+      <li>EtherChannel дамжуулах чадварыг нэмэгдүүлэхэд</li>
+      <li>Бага хоцролт (latency)</li>
+    </ul>
+  </div>
+
+  <h3>L3 свитч дэх Routed Port</h3>
+  <pre>! L2 портыг L3 болгох (routed port):
+D1(config)# interface g0/0/1
+D1(config-if)# no switchport   ! ← Свитч портын функцийг хасна
+D1(config-if)# ip address 10.10.10.2 255.255.255.0
+D1(config-if)# no shutdown</pre>
+</section>
+
+<!-- ═══════════════════════════ ETHERCHANNEL ═══════════════════════════ -->
+<section class="module" id="etherchannel">
+  <div class="module-header">
+    <div class="module-num">EC</div>
+    <div class="module-title">
+      <h2>EtherChannel</h2>
+      <p>PAgP, LACP, сувгийн нэгтгэл</p>
+    </div>
+  </div>
+
+  <h3>EtherChannel гэж юу вэ</h3>
+  <p>EtherChannel нь хэд хэдэн физик Ethernet сувгийг нэг логик суваг болгон нэгтгэдэг. STP нэг порт гэж хардаг → блоклохгүй. Алдааг тэсвэрлэх чадвар ба ачааллын тэнцвэрлэлтийг хангана.</p>
+  <ul>
+    <li>Нэг EtherChannel-д <strong>8 порт</strong> хүртэл.</li>
+    <li>Catalyst 2960 <strong>6 EtherChannel</strong> хүртэл дэмждэг.</li>
+    <li>Хамгийн өндөр хурд: 800 Mbps (Fast) эсвэл <strong>8 Gbps</strong> (Гигабит EtherChannel).</li>
+    <li>Нэг EtherChannel дотор өөр өөр төрлүүдийг (Fast + Gigabit) холих боломжгүй.</li>
+  </ul>
+  <p>Логик интерфейсийг <strong>port channel</strong> гэнэ.</p>
+
+  <h3>PAgP — Портын нэгтгэлийн протокол</h3>
+  <p><strong>Cisco</strong>-ийн өмчийн. Пакет 30 секунд тутамд илгээгддэг.</p>
+  <table>
+    <tr><th>Горим</th><th>Тайлбар</th></tr>
+    <tr><td><code>on</code></td><td>Хүчлэн EtherChannel, PAgP хэлэлцэлгүй</td></tr>
+    <tr><td><code>desirable</code></td><td>Идэвхтэйгээр хэлэлцэл эхлүүлдэг (LACP active-тай адил)</td></tr>
+    <tr><td><code>auto</code></td><td>Идэвхгүй: хариу өгдөг ч эхлүүлдэггүй (LACP passive-тай адил)</td></tr>
+  </table>
+
+  <div class="card info">
+    <div class="tip-label">📊 PAgP: хэзээ EtherChannel үүсдэг вэ?</div>
+    <table>
+      <tr><th>S1 \ S2</th><th>on</th><th>desirable</th><th>auto</th></tr>
+      <tr><td><strong>on</strong></td><td>✅</td><td>❌</td><td>❌</td></tr>
+      <tr><td><strong>desirable</strong></td><td>❌</td><td>✅</td><td>✅</td></tr>
+      <tr><td><strong>auto</strong></td><td>❌</td><td>✅</td><td>❌</td></tr>
+    </table>
+  </div>
+
+  <h3>LACP — Холбоосын нэгтгэлийн удирдлагын протокол</h3>
+  <p><strong>IEEE 802.3ad</strong> стандарт. Олон постачальникын орчинд ажилладаг.</p>
+  <table>
+    <tr><th>Горим</th><th>Тайлбар</th></tr>
+    <tr><td><code>on</code></td><td>LACP хэлэлцэлгүй</td></tr>
+    <tr><td><code>active</code></td><td>Идэвхтэйгээр хэлэлцэл эхлүүлдэг</td></tr>
+    <tr><td><code>passive</code></td><td>Идэвхгүй: зөвхөн хариу өгдөг</td></tr>
+  </table>
+
+  <div class="card info">
+    <div class="tip-label">📊 LACP: хэзээ EtherChannel үүсдэг вэ?</div>
+    <table>
+      <tr><th>S1 \ S2</th><th>on</th><th>active</th><th>passive</th></tr>
+      <tr><td><strong>on</strong></td><td>✅</td><td>❌</td><td>❌</td></tr>
+      <tr><td><strong>active</strong></td><td>❌</td><td>✅</td><td>✅</td></tr>
+      <tr><td><strong>passive</strong></td><td>❌</td><td>✅</td><td>❌</td></tr>
+    </table>
+  </div>
+
+  <h3>EtherChannel тохиргоо (LACP)</h3>
+  <pre>! LACP-тай EtherChannel тохиргоо:
+S1(config)# interface range fa0/1-2
+S1(config-if-range)# channel-group 1 mode active
+S1(config-if-range)# exit
+
+S1(config)# interface port-channel 1
+S1(config-if)# switchport mode trunk
+S1(config-if)# switchport trunk allowed vlan 1,10,20
+
+! Шалгах:
+S1# show etherchannel summary
+S1# show interfaces port-channel 1
+S1# show etherchannel port-channel</pre>
+
+  <div class="card danger">
+    <div class="tip-label">⚠️ EtherChannel-ийн нийтлэг алдаа</div>
+    <ul>
+      <li>Өөр VLAN-д байгаа порт → EtherChannel үүсэхгүй</li>
+      <li>Портуудын Native VLAN өөр</li>
+      <li>Тrunking бүх портод тохируулагдаагүй</li>
+      <li>Зөвшөөрөгдсөн VLAN муж өөр</li>
+      <li>PAgP/LACP горим тохирохгүй (auto+auto, passive+passive)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SWITCHING CONCEPTS ═══════════════════════════ -->
+<section class="module" id="switching">
+  <div class="module-header">
+    <div class="module-num">SW</div>
+    <div class="module-title">
+      <h2>Шилжүүлэлтийн ойлголт</h2>
+      <p>MAC хүснэгт, шилжүүлэлтийн аргууд, домэйнүүд</p>
+    </div>
+  </div>
+
+  <h3>MAC хүснэгт (CAM хүснэгт)</h3>
+  <p>Свитч <strong>эхийн MAC</strong> + порт бичин MAC хаягийн хүснэгт бүтээдэг. Хоёр алхамт процесс:</p>
+  <ul>
+    <li><strong>Сурах</strong>: Эхийн MAC-г харна → хүснэгтэд байхгүй бол нэмнэ. Таймаут <strong>5 минут</strong>-д тавигдана.</li>
+    <li><strong>Дамжуулах</strong>: Очих MAC-г харна → хүснэгтэд байвал тодорхой порт руу илгээнэ. Байхгүй бол <strong>flooding</strong> (орох портоос бусад бүх порт руу).</li>
+  </ul>
+  <div class="card warn">
+    <div class="tip-label">📌 Flooding</div>
+    <p>Очих MAC тодорхойгүй эсвэл broadcast бол фрейм нь орох (ingress) портоос бусад бүх порт руу илгээгддэг. Ingress = орох порт, Egress = гарах порт.</p>
+  </div>
+
+  <h3>Шилжүүлэлтийн аргууд</h3>
+  <div class="two-col">
+    <div class="card success">
+      <div class="tip-label">Store-and-Forward (Cisco-ийн илүүд үзсэн)</div>
+      <ul>
+        <li><strong>Бүх фреймийг</strong> бүхэлд нь хүлээн авна</li>
+        <li><strong>FCS (CRC)</strong> шалгана — гэмтсэн фреймийг устгана</li>
+        <li>Буфержилт → өөр хурдтай портуудыг дэмжинэ</li>
+        <li>Шалгалтын улмаас удаан</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <div class="tip-label">Cut-Through</div>
+      <ul>
+        <li><strong>Очих MAC</strong>-г уншсаны дараа шууд дамжуулна</li>
+        <li><strong>FCS шалгахгүй</strong> → алдаа тархуулж болно</li>
+        <li>Хурдан: хоцролт &lt;10 микросекунд</li>
+        <li>Өөр хурдтай портуудыг дэмждэггүй</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card info">
+    <div class="tip-label">Fragment-Free</div>
+    <p>Cut-Through-ийн хувилбар. Runt фреймүүдийг (64 байтаас бага) шүүхийн тулд эхний <strong>64 байтыг</strong> уншина (Ethernet фреймийн хамгийн бага хэмжээ). Хурд ба найдвартай байдлын тэнцвэр.</p>
+  </div>
+
+  <h3>Домэйнүүд</h3>
+  <ul>
+    <li><strong>Мөргөлдөөний домэйн</strong> — мөргөлдөөн үүсгэж болох төхөөрөмжүүдийн бүлэг. Свитч хоп болгонд тусдаа мөргөлдөөний домэйн үүсгэдэг (бүрэн дуплекст мөргөлдөөн байхгүй). Хаб — нэг том домэйн.</li>
+    <li><strong>Broadcast домэйн</strong> — broadcast хүлээн авдаг төхөөрөмжүүд. Свитч broadcast домэйнийг <strong>өргөтгөнө</strong>. Зөвхөн <strong>роутер (L3)</strong> broadcast домэйнийг хуваана.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════ STP ═══════════════════════════ -->
+<section class="module" id="stp">
+  <div class="module-header">
+    <div class="module-num">STP</div>
+    <div class="module-title">
+      <h2>STP — Spanning Tree Protocol</h2>
+      <p>L2 сүлжээн дэх гогцоог сэргийлэх</p>
+    </div>
+  </div>
+
+  <h3>STP яагаад хэрэгтэй вэ</h3>
+  <p>STP-гүйгээр илүүдэл замтай сүлжээнд <strong>L2 гогцоо</strong> үүснэ. Үр дагавар: MAC хүснэгтийн тогтворгүй байдал, суваг дүүргэлт, CPU 100% — сүлжээ ажиллахаа болино.</p>
+  <p><strong>Broadcast Storm</strong> — хэдхэн секундын дотор сүлжээг доголдуулах хэтэрхий олон broadcast пакет.</p>
+
+  <div class="card info">
+    <div class="tip-label">ℹ️ STP-ийн түүх</div>
+    <p>STP-г <strong>Radia Perlman</strong> 1985 онд Digital Equipment Corporation-д ажиллаж байхдаа бүтээсэн. Алгоритмыг "An Algorithm for Distributed Computation of a Spanning Tree in an Extended LAN" нийтлэлд нийтэлсэн.</p>
+  </div>
+
+  <h3>STP хэрхэн ажилладаг вэ</h3>
+  <ul>
+    <li><strong>Root Bridge сонголт</strong> — нэг свитч "мод-ийн үндэс" болно. Бусад бүгд түүн рүү хүрэх замыг бүтээнэ.</li>
+    <li><strong>Илүүдэл замыг блоклох</strong> — Blocking горимын портууд хэрэглэгчийн трафик дамжуулахгүй.</li>
+    <li><strong>Гэмтэл үед дахин тооцоолох</strong> — зам унахад STP нөөц замыг нээнэ.</li>
+  </ul>
+
+  <h3>STP-ийн хувьсал</h3>
+  <table>
+    <tr><th>Протокол</th><th>Стандарт</th><th>Онцлог</th></tr>
+    <tr><td>STP</td><td>IEEE 802.1D</td><td>Анхны, удаан нэгдлийн хугацаа (~50 сек)</td></tr>
+    <tr><td>RSTP</td><td>IEEE 802.1w</td><td>Rapid STP — хурдан нэгдэл</td></tr>
+    <tr><td>PVST+</td><td>Cisco</td><td>VLAN болгонд тусдаа STP</td></tr>
+    <tr><td>Rapid PVST+</td><td>Cisco</td><td>VLAN болгонд RSTP — хамгийн сайн сонголт</td></tr>
+    <tr><td>MSTP/MST</td><td>IEEE 802.1s</td><td>Multiple STP — VLAN-уудыг бүлэглэх</td></tr>
+  </table>
+  <p>Cisco свитчүүд гогцоог сэргийлэхийн тулд STP-г анхдагчаар идэвхтэй байлгадаг.</p>
+</section>
+
+<!-- ═══════════════════════════ ETHERNET SWITCHING ═══════════════════════════ -->
+<section class="module" id="eth-sw">
+  <div class="module-header">
+    <div class="module-num">E</div>
+    <div class="module-title">
+      <h2>Ethernet шилжүүлэлт</h2>
+      <p>Ethernet фрейм, MAC хаяг, ARP</p>
+    </div>
+  </div>
+
+  <h3>Ethernet фреймийн бүтэц (802.3)</h3>
+  <table>
+    <tr><th>Талбар</th><th>Хэмжээ</th><th>Тайлбар</th></tr>
+    <tr><td>Preamble</td><td>7 байт</td><td>Синхрончлол — 1 ба 0 ээлжлэн</td></tr>
+    <tr><td>SFD (Фрейм эхлэлийн тусгаарлагч)</td><td>1 байт</td><td>Фрейм эхлэл: 10101011</td></tr>
+    <tr><td>Очих MAC</td><td><strong>6 байт</strong></td><td>Хүлээн авагчийн MAC хаяг</td></tr>
+    <tr><td>Эхийн MAC</td><td><strong>6 байт</strong></td><td>Илгээгчийн MAC хаяг</td></tr>
+    <tr><td>EtherType / Урт</td><td>2 байт</td><td>L3 протоколын төрөл: 0x0800=IPv4, 0x86DD=IPv6, 0x0806=ARP</td></tr>
+    <tr><td>Өгөгдөл</td><td>46–1500 байт</td><td>Ачааллын өгөгдөл (payload)</td></tr>
+    <tr><td>FCS</td><td>4 байт</td><td>Фреймийн шалгах дараалал (CRC) — алдаа илрүүлэх</td></tr>
+  </table>
+
+  <div class="card warn">
+    <div class="tip-label">📏 Ethernet фреймийн хэмжээ</div>
+    <ul>
+      <li>Хамгийн бага хэмжээ: <strong>64 байт</strong> (хэрэв бага бол runt, хаягддаг)</li>
+      <li>Хамгийн их хэмжээ: <strong>1518 байт</strong> (802.1Q тэгтэй бол 1522 байт)</li>
+      <li>MTU (Хамгийн их дамжуулах нэгж): <strong>1500 байт</strong></li>
+    </ul>
+  </div>
+
+  <h3>MAC хаяг</h3>
+  <ul>
+    <li><strong>48 бит</strong> (6 байт), XX:XX:XX:XX:XX:XX hex хэлбэрээр бичигддэг.</li>
+    <li>Эхний 3 байт — <strong>OUI</strong> (Байгууллагын өвөрмөц таних тэмдэг), IEEE-ийн үйлдвэрлэгчид олгодог.</li>
+    <li>Сүүлийн 3 байт — үйлдвэрлэгчийн тогтоосон төхөөрөмжийн өвөрмөц таних тэмдэг.</li>
+    <li><strong>FF:FF:FF:FF:FF:FF</strong> — broadcast MAC хаяг.</li>
+    <li>Эхний байтын хамгийн бага битийн хоёр дахь бит = 1 → multicast/broadcast.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════ ARP ═══════════════════════════ -->
+<section class="module" id="arp">
+  <div class="module-header">
+    <div class="module-num">ARP</div>
+    <div class="module-title">
+      <h2>ARP ба ND — Хаяг зохицуулалт</h2>
+      <p>IP ↔ MAC зөрүүлэлт</p>
+    </div>
+  </div>
+
+  <h3>ARP — Хаяг зохицуулалтын протокол (IPv4)</h3>
+  <p>ARP нь нэг сүлжээний хүрээнд мэдэгдэж байгаа IP хаягаар MAC хаяг олоход ашиглагдана.</p>
+  <ul>
+    <li><strong>ARP хүсэлт</strong> — broadcast (FF:FF:FF:FF:FF:FF). "X.X.X.X IP хаяг хэнд байна вэ?"</li>
+    <li><strong>ARP хариу</strong> — хүсэлт тавьсан руу unicast. "Энэ би, миний MAC — XX:XX:XX..."</li>
+  </ul>
+  <p>Үр дүнг <strong>ARP хүснэгт</strong>-т (ARP cache) кэш болгон хадгалдаг. Шалгах: <code>arp -a</code> (Windows) эсвэл <code>show ip arp</code> (Cisco).</p>
+
+  <div class="card warn">
+    <div class="tip-label">⚠️ ARP Spoofing</div>
+    <p>Халдагч хуурамч ARP хариу илгээж болно → MAC хаяг солигдоно → трафик таслагдана (Хооронд орох халдлага).</p>
+  </div>
+
+  <h3>ND — Хөршийн илрүүлэлт (IPv6)</h3>
+  <p>IPv6 ARP ашиглахгүй. Оронд нь <strong>Neighbor Discovery Protocol (NDP)</strong>, ICMPv6 ашигладаг:</p>
+  <ul>
+    <li><strong>NS</strong> (Хөршийн хүсэлт) — MAC хаяг хүсэлт (ARP хүсэлттэй адил).</li>
+    <li><strong>NA</strong> (Хөршийн зар) — MAC хаягтай хариу (ARP хариутай адил).</li>
+    <li><strong>RS</strong> (Роутерийн хүсэлт) — роутерийн мэдээлэл хүсэх.</li>
+    <li><strong>RA</strong> (Роутерийн зар) — роутер сүлжээний параметр тархаана.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════ IPv4 ═══════════════════════════ -->
+<section class="module" id="ipv4">
+  <div class="module-header">
+    <div class="module-num">IP4</div>
+    <div class="module-title">
+      <h2>IPv4 Хаяглалт</h2>
+      <p>Ангиуд, дэд сүлжээ, VLSM, хувийн хаягууд</p>
+    </div>
+  </div>
+
+  <h3>IPv4 толгойн бүтэц</h3>
+  <table>
+    <tr><th>Талбар</th><th>Хэмжээ</th><th>Тайлбар</th></tr>
+    <tr><td>Хувилбар</td><td>4 бит</td><td>IPv4-д 4</td></tr>
+    <tr><td>IHL</td><td>4 бит</td><td>Толгойн урт (32 битийн үгэд)</td></tr>
+    <tr><td>DSCP</td><td>6 бит</td><td>QoS тэмдэглэлт</td></tr>
+    <tr><td>ECN</td><td>2 бит</td><td>Опшин мэдэгдэл</td></tr>
+    <tr><td>Нийт урт</td><td>16 бит</td><td>Пакетийн нийт урт</td></tr>
+    <tr><td>Таних тэмдэг</td><td>16 бит</td><td>Хэсэгчлэлтийн ID</td></tr>
+    <tr><td>Тугнууд</td><td>3 бит</td><td>DF (Хэсэгчлэхгүй), MF (Дараах хэсэг)</td></tr>
+    <tr><td>Хэсэг зай</td><td>13 бит</td><td>Хэсэгт шилжих</td></tr>
+    <tr><td><strong>TTL</strong></td><td>8 бит</td><td>Амьдрах хугацаа — роутер болгонд 1-ээр хасагдана. 0 болоход — пакет устана</td></tr>
+    <tr><td><strong>Протокол</strong></td><td>8 бит</td><td><strong>ICMP=1, TCP=6, UDP=17</strong></td></tr>
+    <tr><td>Толгойн шалгах дүн</td><td>16 бит</td><td>Толгойн шалгах дүн</td></tr>
+    <tr><td>Эхийн IP</td><td>32 бит</td><td>Илгээгчийн IP</td></tr>
+    <tr><td>Очих IP</td><td>32 бит</td><td>Хүлээн авагчийн IP</td></tr>
+  </table>
+
+  <div class="card danger">
+    <div class="tip-label">🔥 МАШ ЧУХАЛ — Протоколын дугаарууд</div>
+    <p><span class="badge blue">ICMP = 1</span> <span class="badge green">TCP = 6</span> <span class="badge purple">UDP = 17</span></p>
+    <p>IPv4 толгой дахь энэ талбар (Protocol field) пакетийн доторх тээврийн давхаргын протоколыг заана. UDP нь <strong>17</strong> (hex-д 0x11) хэлбэрээр хадгалагдана.</p>
+  </div>
+
+  <h3>Хувийн (Private) IPv4 хаягууд (RFC 1918)</h3>
+  <table>
+    <tr><th>Анги</th><th>Муж</th><th>Сүлжээ CIDR</th></tr>
+    <tr><td>A</td><td>10.0.0.0 – 10.255.255.255</td><td>10.0.0.0/8</td></tr>
+    <tr><td>B</td><td>172.16.0.0 – 172.31.255.255</td><td>172.16.0.0/12</td></tr>
+    <tr><td>C</td><td>192.168.0.0 – 192.168.255.255</td><td>192.168.0.0/16</td></tr>
+  </table>
+
+  <h3>Тусгай IPv4 хаягууд</h3>
+  <table>
+    <tr><th>Хаяг</th><th>Тайлбар</th></tr>
+    <tr><td><code>0.0.0.0/0</code></td><td>Анхдагч маршрут — ямар ч сүлжээ</td></tr>
+    <tr><td><code>127.0.0.1</code></td><td>Loopback (сүлжээний стекийн тест)</td></tr>
+    <tr><td><code>169.254.0.0/16</code></td><td>APIPA — DHCP байхгүй үед автоматаар</td></tr>
+    <tr><td><code>255.255.255.255</code></td><td>Хязгаарлагдмал broadcast (чиглүүлэгддэггүй)</td></tr>
+  </table>
+
+  <h3>Дэд сүлжээ ба CIDR</h3>
+  <p>Wildcard маск — дэд сүлжээний урвуу маск. ACL ба OSPF-д хэрэглэнэ. Тооцоолох: <strong>255.255.255.255 − дэд сүлжээний маск = wildcard</strong>.</p>
+  <pre>Жишээ: /24 = 255.255.255.0
+Wildcard = 255.255.255.255 - 255.255.255.0 = 0.0.0.255
+
+/28 = 255.255.255.240
+Wildcard = 255.255.255.255 - 255.255.255.240 = 0.0.0.15</pre>
+</section>
+
+<!-- ═══════════════════════════ IPv6 ═══════════════════════════ -->
+<section class="module" id="ipv6">
+  <div class="module-header">
+    <div class="module-num">IP6</div>
+    <div class="module-title">
+      <h2>IPv6 Хаяглалт</h2>
+      <p>Бүтэц, хаягийн төрлүүд, SLAAC, DHCPv6</p>
+    </div>
+  </div>
+
+  <h3>IPv6 бүтэц</h3>
+  <ul>
+    <li><strong>128 бит</strong> (хоёр цэгээр тусгаарлагдсан 8 бүлэгт 32 hex тэмдэгт).</li>
+    <li>Жижиг/том үсэг хамаагүй. Жишээ: <code>2001:0DB8:0000:0000:0000:0000:0000:0001</code></li>
+  </ul>
+
+  <h4>IPv6 товчлох дүрмүүд</h4>
+  <ul>
+    <li>Бүлгийн тэргүүлэх тэгийг хасах: <code>0001 → 1</code></li>
+    <li>Нэг тасралтгүй тэгийн бүлгийг <code>::</code>-ээр орлуулах (хаягт зөвхөн нэг удаа)</li>
+    <li>Жишээ: <code>2001:DB8::1</code></li>
+  </ul>
+
+  <h3>IPv6 хаягийн төрлүүд</h3>
+  <table>
+    <tr><th>Төрөл</th><th>Угтвар</th><th>Тайлбар</th></tr>
+    <tr><td><strong>Global Unicast</strong></td><td>2000::/3</td><td>Нийтийн чиглүүлэгдэх хаяг (нийтийн IPv4-тай адил)</td></tr>
+    <tr><td><strong>Link-Local</strong></td><td>FE80::/10</td><td>Зөвхөн нэг холбоосын хүрээнд. Автоматаар тогтоогддог. Заавал байх ёстой!</td></tr>
+    <tr><td><strong>Loopback</strong></td><td>::1/128</td><td>127.0.0.1-тэй адил</td></tr>
+    <tr><td><strong>Тодорхойгүй</strong></td><td>::/128</td><td>0.0.0.0-тай адил</td></tr>
+    <tr><td><strong>Unique Local</strong></td><td>FC00::/7</td><td>Хувийн IPv4-тай адил (RFC 1918), зөвхөн байгууллагын дотор</td></tr>
+    <tr><td><strong>Multicast</strong></td><td>FF00::/8</td><td>Бүлгийн рассылка (IPv6-д broadcast байхгүй!)</td></tr>
+  </table>
+
+  <div class="card warn">
+    <div class="tip-label">⚡ IPv6-д Broadcast байхгүй!</div>
+    <p>IPv6 broadcast оронд multicast ашигладаг. Жишээлбэл, ARP broadcast оронд NS (Хөршийн хүсэлт) нь solicited-node multicast хаяг руу илгээгддэг.</p>
+  </div>
+
+  <h3>IPv6 хаяг тогтоох аргууд</h3>
+  <ul>
+    <li><strong>SLAAC</strong> (Байлгүй хаягийн автомат тохиргоо) — хост нь роутерийн угтвар + EUI-64 (эсвэл санамсаргүй)-аар хаягаа өөрөө бүтээдэг. Сервергүй.</li>
+    <li><strong>SLAAC + DHCPv6 (Байлгүй)</strong> — хаяг SLAAC-аас, бусад параметр (DNS) DHCPv6-аас.</li>
+    <li><strong>DHCPv6 (Байлтай)</strong> — сервер хаяг болон бүх параметрийг тогтооно. DHCPv4-тай адил.</li>
+  </ul>
+
+  <h4>EUI-64 интерфейсийн ID-д</h4>
+  <p>MAC хаяг (48 бит) авна → хагасаар хуваана → <code>FF:FE</code> оруулна → 7-р битийг (Universal/Local бит) урвуу болгоно. Нийт 64 бит.</p>
+
+  <h3>Тусгай IPv6 Multicast хаягууд</h3>
+  <table>
+    <tr><th>Хаяг</th><th>Тайлбар</th></tr>
+    <tr><td><code>FF02::1</code></td><td>Бүх зангилаа (сегментийн бүх IPv6 төхөөрөмж)</td></tr>
+    <tr><td><code>FF02::2</code></td><td>Бүх роутер (бүх IPv6 роутер)</td></tr>
+    <tr><td><code>FF02::5</code></td><td>Бүх OSPF роутер</td></tr>
+    <tr><td><code>FF02::6</code></td><td>Бүх OSPF DR/BDR</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════════ ICMP ═══════════════════════════ -->
+<section class="module" id="icmp">
+  <div class="module-header">
+    <div class="module-num">ICMP</div>
+    <div class="module-title">
+      <h2>ICMP — Интернэт хяналтын мессежийн протокол</h2>
+      <p>Алдааны мессеж, ping, traceroute</p>
+    </div>
+  </div>
+
+  <h3>ICMP гэж юу вэ</h3>
+  <p>ICMP нь алдааны мессеж илгээх, оношлоход IP-д ашиглагддаг. 3-р давхаргад (сүлжээний) ажилладаг. IPv4 толгойн Protocol дугаар: <strong>1</strong>.</p>
+
+  <h3>ICMP мессежийн төрлүүд</h3>
+  <table>
+    <tr><th>Төрөл</th><th>Мессеж</th></tr>
+    <tr><td>Очих газар хүрэхгүй байна</td><td>Хост эсвэл сүлжээ хүрэхгүй (Төрөл 3)</td></tr>
+    <tr><td>Цаг дууссан</td><td>TTL дууссан (Төрөл 11) — traceroute ашигладаг</td></tr>
+    <tr><td>Дахин чиглүүлэх</td><td>Илүү сайн маршрут байна</td></tr>
+    <tr><td>Echo хүсэлт / Хариу</td><td>Ping (Төрөл 8 / Төрөл 0)</td></tr>
+  </table>
+
+  <h3>Ping ба Traceroute</h3>
+  <ul>
+    <li><strong>Ping</strong> — ICMP Echo хүсэлт илгээж, Echo хариу хүлээнэ. Хүрэх боломжийг шалгана.</li>
+    <li><strong>Traceroute</strong> — TTL=1, 2, 3... пакет илгээнэ. Роутер болгон "TTL дууссан" буцааж тайлна → маршрутын зураглал бүтээгдэнэ.</li>
+  </ul>
+
+  <div class="card info">
+    <div class="tip-label">ICMPv6 ба NDP</div>
+    <p>ICMPv6 нь Neighbor Discovery (NDP)-д ашиглагддаг — NS/NA/RS/RA мессеж илгээнэ. IPv6 ARP ашиглахгүй.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ ROUTING ═══════════════════════════ -->
+<section class="module" id="routing">
+  <div class="module-header">
+    <div class="module-num">RT</div>
+    <div class="module-title">
+      <h2>Чиглүүлэлтийн ойлголт</h2>
+      <p>Чиглүүлэлтийн хүснэгт, AD, маршрутууд</p>
+    </div>
+  </div>
+
+  <h3>Чиглүүлэлтийн хүснэгт</h3>
+  <p>Роутер <strong>чиглүүлэлтийн хүснэгт (Routing Table)</strong>-д үндэслэн шийдвэр гаргана. Хамгийн сайн маршрутыг сонгоход:</p>
+  <ol>
+    <li><strong>Угтварын урт тохирол (Longest Match)</strong> — маск урт байх тусам нарийвчлалтай.</li>
+    <li><strong>Административ зай (AD)</strong> — AD бага → илүү найдвартай эх.</li>
+    <li><strong>Метрик</strong> — маршрутийн зардал.</li>
+  </ol>
+
+  <h3>Административ зай (AD)</h3>
+  <table>
+    <tr><th>Маршрутийн эх</th><th>AD</th></tr>
+    <tr><td>Шууд холбогдсон</td><td>0</td></tr>
+    <tr><td>Статик маршрут</td><td>1</td></tr>
+    <tr><td>EIGRP нийлбэр маршрут</td><td>5</td></tr>
+    <tr><td>Гадаад BGP</td><td>20</td></tr>
+    <tr><td>EIGRP</td><td>90</td></tr>
+    <tr><td>IGRP</td><td>100</td></tr>
+    <tr><td><strong>OSPF</strong></td><td><strong>110</strong></td></tr>
+    <tr><td>IS-IS</td><td>115</td></tr>
+    <tr><td>RIP</td><td>120</td></tr>
+    <tr><td>Тодорхойгүй / Хүрэхгүй</td><td>255</td></tr>
+  </table>
+
+  <h3>Чиглүүлэлтийн хүснэгт дэх маршрутийн төрлүүд</h3>
+  <table>
+    <tr><th>Код</th><th>Төрөл</th><th>AD</th></tr>
+    <tr><td>C</td><td>Connected (шууд холбогдсон)</td><td>0</td></tr>
+    <tr><td>L</td><td>Local (интерфейсийн өөрийн IP, /32)</td><td>0</td></tr>
+    <tr><td>S</td><td>Static (статик)</td><td>1</td></tr>
+    <tr><td>O</td><td>OSPF</td><td>110</td></tr>
+    <tr><td>D</td><td>EIGRP</td><td>90</td></tr>
+    <tr><td>R</td><td>RIP</td><td>120</td></tr>
+    <tr><td>S*</td><td>Анхдагч статик маршрут (нэр дэвшигч)</td><td>1</td></tr>
+    <tr><td>O*E2</td><td>OSPF Гадаад 2-р төрөл (өөр домэйнаас)</td><td>110</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════════ STATIC ═══════════════════════════ -->
+<section class="module" id="static">
+  <div class="module-header">
+    <div class="module-num">SR</div>
+    <div class="module-title">
+      <h2>IP Статик чиглүүлэлт</h2>
+      <p>IPv4 ба IPv6 статик маршрутууд</p>
+    </div>
+  </div>
+
+  <h3>Статик маршрутууд</h3>
+  <pre>! Үндсэн синтакс:
+R1(config)# ip route сүлжээний-хаяг дэд-сүлжээний-маск {дараагийн-хоп | гарах-интерфейс}
+
+! Жишээ — дараагийн хопоор:
+R1(config)# ip route 192.168.2.0 255.255.255.0 10.0.0.2
+
+! Жишээ — гарах интерфейсээр:
+R1(config)# ip route 192.168.2.0 255.255.255.0 g0/0/1
+
+! Анхдагч маршрут:
+R1(config)# ip route 0.0.0.0 0.0.0.0 10.0.0.1
+
+! IPv6 статик маршрут:
+R1(config)# ipv6 route 2001:db8::/32 2001:db8::1
+
+! Хөвөгч статик маршрут (нөөц, AD нь OSPF-ийн дараа):
+R1(config)# ip route 192.168.2.0 255.255.255.0 10.0.0.3 115</pre>
+
+  <div class="card info">
+    <div class="tip-label">Бүрэн заасан ба Рекурсив</div>
+    <ul>
+      <li><strong>Дараагийн хопын маршрут</strong> (рекурсив) — дараагийн хопын IP заасан. Роутер гарах интерфейсийг олохын тулд чиглүүлэлтийн хүснэгтийг харна.</li>
+      <li><strong>Шууд залгагдсан маршрут</strong> — зөвхөн гарах интерфейс заасан. Зөвхөн point-to-point суваг дээр ажилладаг.</li>
+      <li><strong>Бүрэн заасан</strong> — гарах интерфейс болон дараагийн хопын IP хоёулаа заасан. Зөвлөмжтэй.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ OSPF ═══════════════════════════ -->
+<section class="module" id="ospf">
+  <div class="module-header">
+    <div class="module-num">OSPF</div>
+    <div class="module-title">
+      <h2>Нэг бүс OSPFv2</h2>
+      <p>Холбоосын-байдал протокол, DR/BDR, зардал</p>
+    </div>
+  </div>
+
+  <h3>OSPF шинж чанарууд</h3>
+  <ul>
+    <li>Төрөл: <strong>Холбоосын-байдал</strong> (RIP шиг зайн вектор биш).</li>
+    <li>Административ зай: <strong>110</strong>.</li>
+    <li>Метрик: <strong>Зардал (Cost)</strong>. Бага = сайн.</li>
+    <li>Алгоритм: <strong>Dijkstra SPF</strong> (Хамгийн богино зам эхлэлтэй).</li>
+    <li><strong>VLSM</strong> ба <strong>CIDR</strong> дэмждэг.</li>
+    <li>Процессийн ID: 1–65535, локал (өөр роутеруудад тохирох шаардлагагүй).</li>
+  </ul>
+
+  <h3>Зардлын (Cost) томъёо</h3>
+  <div class="highlight-box">
+    <p style="font-size: 1.1rem; font-weight: 700; color: var(--accent2); font-family: var(--mono);">
+      Зардал = Лавлагааны зурваасын өргөн / Интерфейсийн зурваасын өргөн
+    </p>
+    <p>Анхдагч лавлагааны зурваасын өргөн = <strong>10⁸ = 100,000,000 bps = 100 Mbps</strong></p>
+    <table style="margin-top: 12px;">
+      <tr><th>Интерфейс</th><th>Зурваасын өргөн</th><th>Зардал (ref=100M)</th><th>Зардал (ref=10G)</th></tr>
+      <tr><td>FastEthernet</td><td>100 Mbps</td><td>1</td><td>100</td></tr>
+      <tr><td>GigabitEthernet</td><td>1 Gbps</td><td>1 ⚠️</td><td>10</td></tr>
+      <tr><td>10GigabitEthernet</td><td>10 Gbps</td><td>1 ⚠️</td><td>1</td></tr>
+    </table>
+    <p style="margin-top: 10px;">⚠️ ref=100M үед Gigabit болон Fast Ethernet ижил cost=1-тэй. Лавлагааны зурваасыг өөрчлөх хэрэгтэй: <code>auto-cost reference-bandwidth 10000</code></p>
+  </div>
+
+  <h3>Роутерийн ID</h3>
+  <p>OSPF Роутерийн ID-г дараах тэргүүлэх дарааллаар сонгоно:</p>
+  <ol>
+    <li><strong>Тодорхой тохируулсан</strong>: <code>router-id X.X.X.X</code></li>
+    <li>Loopback интерфейс дэх хамгийн өндөр IP</li>
+    <li>Идэвхтэй физик интерфейс дэх хамгийн өндөр IP</li>
+  </ol>
+
+  <h3>OSPF үндсэн тохиргоо</h3>
+  <pre>R1(config)# router ospf 10
+R1(config-router)# router-id 1.1.1.1
+R1(config-router)# network 10.1.1.0 0.0.0.3 area 0
+R1(config-router)# network 10.10.1.0 0.0.0.255 area 0
+R1(config-router)# passive-interface loopback 0   ! OSPF Hello илгээхгүй
+
+! Эсвэл интерфейст шууд:
+R1(config)# interface g0/0/0
+R1(config-if)# ip ospf 10 area 0
+
+! Лавлагааны зурваасыг өөрчлөх (бүх роутерт ижилхэн байх ёстой!):
+R1(config-router)# auto-cost reference-bandwidth 10000
+
+! Зардлыг гараар өөрчлөх:
+R1(config-if)# ip ospf cost 15</pre>
+
+  <h3>OSPF таймер</h3>
+  <div class="highlight-box">
+    <ul>
+      <li><strong>Hello интервал</strong>: <code>10 секунд</code> (p2p болон multiaccess дээр анхдагч)</li>
+      <li><strong>Dead интервал</strong>: <code>40 секунд</code> = 4 × Hello. Энэ хугацааны дараа хосыг "унасан" гэж үзнэ.</li>
+      <li>Хоёул хоёр үзүүрт тохирч байх ёстой — тохирохгүй бол adjacency үүсэхгүй!</li>
+    </ul>
+    <pre>! Таймер өөрчлөх:
+R1(config-if)# ip ospf hello-interval 5
+R1(config-if)# ip ospf dead-interval 20</pre>
+  </div>
+
+  <h3>OSPF Multicast хаягууд</h3>
+  <table>
+    <tr><th>Хаяг</th><th>Зориулалт</th></tr>
+    <tr><td><code>224.0.0.5</code></td><td>Бүх OSPF роутер — Hello, DR-ийн LSA</td></tr>
+    <tr><td><code>224.0.0.6</code></td><td>Бүх Designated Router (DR ба BDR) — DROTHER-ийн пакет</td></tr>
+  </table>
+
+  <h3>Multiaccess сүлжээн дэх DR ба BDR</h3>
+  <p>Multiaccess (Ethernet) сүлжээнд OSPF нь LSA трафикийг багасгахын тулд DR (Томилогдсон роутер) ба BDR (Нөөц DR) сонгодог.</p>
+
+  <p><strong>DR/BDR сонголт:</strong></p>
+  <ol>
+    <li>Интерфейс дэх хамгийн өндөр <strong>OSPF Priority</strong> (анхдагч = 1). Priority=0 → DR/BDR болж чадахгүй.</li>
+    <li>Priority ижил байвал → хамгийн өндөр <strong>Роутерийн ID</strong>.</li>
+  </ol>
+
+  <div class="card warn">
+    <div class="tip-label">⚠️ DR сонголт — урьдчилан давах биш!</div>
+    <p>DR/BDR сонгогдсоны дараа өндөр priority/ID-тэй шинэ роутер нэмэгдэх нь одоогийн DR-ийг солихгүй. Сонголт зөвхөн анх ажиллах үед эсвэл DR унах үед явагддаг.</p>
+  </div>
+
+  <pre>! OSPF Priority өөрчлөх:
+R1(config)# interface g0/0/0
+R1(config-if)# ip ospf priority 255   ! (0-255, анхдагч=1)
+
+! OSPF дахин эхлүүлэх (шинэ DR сонголтод):
+R1# clear ip ospf process</pre>
+
+  <h3>OSPF хосын төлвүүд</h3>
+  <table>
+    <tr><th>Төлөв</th><th>Тайлбар</th></tr>
+    <tr><td>FULL/DR</td><td>Designated Router-тай бүрэн adjacency</td></tr>
+    <tr><td>FULL/BDR</td><td>Backup DR-тай бүрэн adjacency</td></tr>
+    <tr><td>FULL/DROTHER</td><td>DR эсвэл BDR-ийн DR биш/BDR биш роутертэй</td></tr>
+    <tr><td>2-WAY/DROTHER</td><td>Хэвийн! Хоёр DROTHER бие биенийг харж байгаа ч бүрэн adjacency бүтээхгүй</td></tr>
+  </table>
+
+  <h3>OSPF шалгах командууд</h3>
+  <pre>R1# show ip ospf neighbor          ! Хосын жагсаалт ба төлвүүд
+R1# show ip ospf interface         ! Интерфейс дэх OSPF параметр
+R1# show ip ospf interface brief   ! Товч хураангуй
+R1# show ip protocols              ! Протокол, Роутерийн ID, сүлжээ, AD=110
+R1# show ip ospf                   ! Процессийн ID, SPF ажиллуулалт
+R1# show ip route ospf             ! Зөвхөн OSPF маршрутууд</pre>
+
+  <h3>OSPF дэх Анхдагч маршрут</h3>
+  <pre>! ASBR-д (хил дамжих роутер):
+R2(config)# ip route 0.0.0.0 0.0.0.0 loopback 1
+R2(config)# router ospf 10
+R2(config-router)# default-information originate
+
+! Бусад роутерийн чиглүүлэлтийн хүснэгтэд:
+O*E2  0.0.0.0/0 [110/1] via ...
+! E2 = өөр домэйнаас Гадаад 2-р төрлийн маршрут</pre>
+</section>
+
+<!-- ═══════════════════════════ NAT ═══════════════════════════ -->
+<section class="module" id="nat">
+  <div class="module-header">
+    <div class="module-num">NAT</div>
+    <div class="module-title">
+      <h2>IPv4-д NAT</h2>
+      <p>Статик, Динамик, PAT (NAT overload)</p>
+    </div>
+  </div>
+
+  <h3>NAT яагаад хэрэгтэй вэ</h3>
+  <p>NAT нь хувийн (private) IPv4 хаягийг нийтийн болгон хөрвүүлдэг. Үндсэн зорилго — <strong>нийтийн IPv4 хаяг хэмнэх</strong>.</p>
+  <p>NAT роутер stub сүлжээний хил дээр (дотоод сүлжээ болон интернэт хооронд) ажилладаг.</p>
+
+  <h3>NAT нэр томьёо</h3>
+  <table>
+    <tr><th>Нэр томьёо</th><th>Тайлбар</th></tr>
+    <tr><td><strong>Inside Local</strong></td><td>Дотроос харагдах төхөөрөмжийн IP (хувийн хаяг)</td></tr>
+    <tr><td><strong>Inside Global</strong></td><td>Гаднаас харагдах төхөөрөмжийн IP (нийтийн хаяг)</td></tr>
+    <tr><td><strong>Outside Global</strong></td><td>Гаднаас харагдах очих IP (серверийн бодит хаяг)</td></tr>
+    <tr><td><strong>Outside Local</strong></td><td>Дотроос харагдах очих IP (ихэвчлэн Outside Global-тай ижил)</td></tr>
+  </table>
+
+  <h3>NAT-ийн төрлүүд</h3>
+  <div class="card success">
+    <div class="tip-label">Статик NAT — 1:1</div>
+    <p>Нэг хувийн хаягийг нэг нийтийн хаяг руу байнга зөрүүлэх. Интернэтийн серверүүдэд хэрэглэнэ.</p>
+    <pre>R2(config)# ip nat inside source static 192.168.10.254 209.165.201.5
+R2(config)# interface serial 0/1/0
+R2(config-if)# ip nat inside
+R2(config)# interface serial 0/1/1
+R2(config-if)# ip nat outside</pre>
+  </div>
+
+  <div class="card info">
+    <div class="tip-label">Динамик NAT — хаягийн цуур</div>
+    <p>Нийтийн хаягийн цуур шаардлагаар хуваарилагдана. Цуур дүүрвэл хүлээнэ.</p>
+    <pre>R2(config)# ip nat pool NAT-POOL1 209.165.200.226 209.165.200.240 netmask 255.255.255.224
+R2(config)# access-list 1 permit 192.168.0.0 0.0.255.255
+R2(config)# ip nat inside source list 1 pool NAT-POOL1</pre>
+  </div>
+
+  <div class="card warn">
+    <div class="tip-label">PAT (NAT Overload) — олон:нэг</div>
+    <p>Олон хувийн хаяг нэг нийтийн хаяг дээр. TCP/UDP портын дугаараар ялгагдана. Хамгийн түгээмэл төрөл.</p>
+    <pre>! PAT нэг IP-тэй (интерфейс):
+R2(config)# ip nat inside source list 1 interface serial 0/1/1 overload
+
+! PAT цуурын хамт:
+R2(config)# ip nat pool NAT-POOL2 209.165.200.226 209.165.200.240 netmask 255.255.255.224
+R2(config)# ip nat inside source list 1 pool NAT-POOL2 overload</pre>
+  </div>
+
+  <h3>PAT дэх портууд</h3>
+  <p>PAT анхны эхийн портыг хадгалдаг. Порт аль хэдийн ашиглагдаж байвал PAT дараах мужаас дараагийн чөлөөт портыг авна:</p>
+  <ul>
+    <li>0–511</li>
+    <li>512–1023</li>
+    <li>1024–65535</li>
+  </ul>
+
+  <h3>NAT шалгах командууд</h3>
+  <pre>R2# show ip nat translations          ! Идэвхтэй хөрвүүлэлтүүд
+R2# show ip nat translations verbose   ! Дэлгэрэнгүй (үүссэн цаг, таймаут)
+R2# show ip nat statistics             ! Статистик (hits, misses, цуур)
+R2# clear ip nat translation *         ! Динамик бичлэгүүдийг цэвэрлэх</pre>
+
+  <h3>NAT64</h3>
+  <p>IPv4 ба IPv6 хооронд протоколын хөрвүүлэлт. Шилжилтийн үед түр ашиглана. IPv6 Unique Local хаяг (ULA, <code>FC00::/7</code>) — RFC 1918-тай адил, гэхдээ хаяг хэмнэх биш.</p>
+
+  <h3>NAT-ийн сул тал</h3>
+  <ul>
+    <li>Хоцролт нэмэгдэнэ (хөрвүүлэлт цаг зарцуулдаг)</li>
+    <li>Дуусгавар хаяглалтыг (end-to-end) тасалдуулдаг</li>
+    <li>Туннелийн протоколыг (IPsec) хүндрүүлдэг</li>
+    <li>Ачааллаас хаяг ашигладаг протоколтой асуудал үүсгэнэ</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════ TRANSPORT ═══════════════════════════ -->
+<section class="module" id="transport">
+  <div class="module-header">
+    <div class="module-num">14</div>
+    <div class="module-title">
+      <h2>Тээврийн давхарга — TCP ба UDP</h2>
+      <p>Сегментчлэл, портууд, найдвартай байдал, урсгал удирдлага</p>
+    </div>
+  </div>
+
+  <h3>Тээврийн давхаргын үүрэг</h3>
+  <p>Тээврийн давхарга — програм ба сүлжээний хоорондох холбох гүүр. Хангадаг зүйлс: сессийг хянах, өгөгдөл сегментчлэх, толгой нэмэх, олон холболтыг мультиплекслэх.</p>
+
+  <h3>TCP ба UDP — харьцуулалт</h3>
+  <table>
+    <tr><th>Шинж чанар</th><th>TCP</th><th>UDP</th></tr>
+    <tr><td>Протоколын дугаар</td><td><strong class="badge green">6</strong></td><td><strong class="badge purple">17</strong></td></tr>
+    <tr><td>Холболт тогтоох</td><td>Тийм (3 алхамт handshake)</td><td>Үгүй (холболтгүй)</td></tr>
+    <tr><td>Найдвартай байдал</td><td>Тийм (ACK, дахин дамжуулалт)</td><td>Үгүй (хамгийн сайн оролдлого)</td></tr>
+    <tr><td>Хүргэлтийн дараалал</td><td>Тийм (дарааллын дугаар)</td><td>Үгүй</td></tr>
+    <tr><td>Урсгал удирдлага</td><td>Тийм (Цонхны хэмжээ)</td><td>Үгүй</td></tr>
+    <tr><td>Нэмэлт ачаалал (толгой)</td><td>Хамгийн бага 20 байт</td><td>8 байт</td></tr>
+    <tr><td>Хэрэглээ</td><td>HTTP, FTP, SMTP, SSH</td><td>DNS, DHCP, VoIP, TFTP, SNMP</td></tr>
+  </table>
+
+  <h3>TCP толгой</h3>
+  <table>
+    <tr><th>Талбар</th><th>Хэмжээ</th><th>Тайлбар</th></tr>
+    <tr><td>Эхийн порт</td><td>16 бит</td><td>Эхийн порт</td></tr>
+    <tr><td>Очих порт</td><td>16 бит</td><td>Очих порт</td></tr>
+    <tr><td>Дарааллын дугаар</td><td>32 бит</td><td>Сегментийг цэгцлэх дугаар</td></tr>
+    <tr><td>Баталгаажуулалтын дугаар</td><td>32 бит</td><td>Дараагийн хүлээж байгаа байт</td></tr>
+    <tr><td>Толгойн урт</td><td>4 бит</td><td>Толгойн урт (өгөгдлийн зай)</td></tr>
+    <tr><td>Нөөцлөгдсөн</td><td>6 бит</td><td>Нөөцлөгдсөн</td></tr>
+    <tr><td><strong>Удирдах битүүд (Тугнууд)</strong></td><td>6 бит</td><td>URG, ACK, PSH, RST, SYN, FIN</td></tr>
+    <tr><td>Цонхны хэмжээ</td><td>16 бит</td><td>Нэг удаад хүлээн авах байтын тоо</td></tr>
+    <tr><td>Шалгах дүн</td><td>16 бит</td><td>Шалгах дүн</td></tr>
+    <tr><td>Яаралтай</td><td>16 бит</td><td>Яаралтай өгөгдлийн заагч</td></tr>
+  </table>
+
+  <div class="card warn">
+    <div class="tip-label">🔥 TCP тугнууд — бүгдийг цээжил!</div>
+    <p>
+      <span class="badge blue">URG</span> Яаралтай өгөгдөл &nbsp;
+      <span class="badge green">ACK</span> Баталгаажуулалт &nbsp;
+      <span class="badge yellow">PSH</span> Push — програмд шууд дамжуулах &nbsp;
+      <span class="badge red">RST</span> Холболт цуцлах &nbsp;
+      <span class="badge cyan">SYN</span> Синхрончлол (холболт тогтоох) &nbsp;
+      <span class="badge purple">FIN</span> Өгөгдөл дуусав
+    </p>
+  </div>
+
+  <h3>UDP толгой</h3>
+  <p>UDP толгой — зөвхөн <strong>4 талбар, 8 байт</strong>:</p>
+  <table>
+    <tr><th>Талбар</th><th>Хэмжээ</th></tr>
+    <tr><td>Эхийн порт</td><td>16 бит</td></tr>
+    <tr><td>Очих порт</td><td>16 бит</td></tr>
+    <tr><td>Урт</td><td>16 бит</td></tr>
+    <tr><td>Шалгах дүн</td><td>16 бит</td></tr>
+  </table>
+
+  <h3>TCP 3 алхамт Handshake (Холболт тогтоох)</h3>
+  <div class="highlight-box">
+    <p style="font-family: var(--mono); line-height: 2.2; color: #a5f3fc;">
+      Клиент <span style="color:#34d399;">→ SYN →</span> Сервер &nbsp;&nbsp;&nbsp;(холбогдохыг хүсэж байна)<br>
+      Клиент <span style="color:#60a5fa;">← SYN+ACK ←</span> Сервер &nbsp;&nbsp;&nbsp;(баталгаажуулж байна, хүлээж байна)<br>
+      Клиент <span style="color:#a78bfa;">→ ACK →</span> Сервер &nbsp;&nbsp;&nbsp;(хүлээн авав, холболт тогтов)
+    </p>
+  </div>
+
+  <h3>TCP 4 алхамт дуусгавар (Сессий дуусгах)</h3>
+  <div class="highlight-box">
+    <p style="font-family: var(--mono); line-height: 2.2; color: #a5f3fc;">
+      Клиент <span style="color:#f87171;">→ FIN →</span> Сервер &nbsp;&nbsp;&nbsp;(илгээх зүйл алга)<br>
+      Клиент <span style="color:#60a5fa;">← ACK ←</span> Сервер &nbsp;&nbsp;&nbsp;(FIN хүлээн авав)<br>
+      Клиент <span style="color:#f87171;">← FIN ←</span> Сервер &nbsp;&nbsp;&nbsp;(манайд ч илгээх зүйл алга)<br>
+      Клиент <span style="color:#60a5fa;">→ ACK →</span> Сервер &nbsp;&nbsp;&nbsp;(хүлээн авав, холболт хаагдав)
+    </p>
+  </div>
+
+  <h3>MSS ба Цонхны хэмжээ</h3>
+  <ul>
+    <li><strong>MSS</strong> (Хамгийн их сегментийн хэмжээ) — TCP сегмент дэх өгөгдлийн хамгийн их хэмжээ.</li>
+    <li>Стандарт MSS = <strong>1460 байт</strong> (1500 MTU − 20 TCP толгой − 20 IP толгой = 1460).</li>
+    <li><strong>Цонхны хэмжээ</strong> — ACK-гүйгээр илгээх байтын тоо. Урсгал удирдлагын механизм.</li>
+    <li><strong>SACK</strong> (Сонгомол баталгаажуулалт) — бүгдийг биш тодорхой сегментийг баталгаажуулах боломж.</li>
+    <li><strong>Гулсагч цонх (Sliding Window)</strong> — ACK хүлээн авах тусам цонх шилжинэ.</li>
+  </ul>
+
+  <h3>Портын дугаарууд</h3>
+  <table>
+    <tr><th>Порт</th><th>Протокол</th><th>Тээвэр</th></tr>
+    <tr><td><strong>20</strong></td><td>FTP өгөгдөл</td><td>TCP</td></tr>
+    <tr><td><strong>21</strong></td><td>FTP удирдлага</td><td>TCP</td></tr>
+    <tr><td><strong>22</strong></td><td>SSH</td><td>TCP</td></tr>
+    <tr><td><strong>23</strong></td><td>Telnet</td><td>TCP</td></tr>
+    <tr><td><strong>25</strong></td><td>SMTP</td><td>TCP</td></tr>
+    <tr><td><strong>53</strong></td><td>DNS</td><td>UDP + TCP</td></tr>
+    <tr><td><strong>67</strong></td><td>DHCP Сервер</td><td>UDP</td></tr>
+    <tr><td><strong>68</strong></td><td>DHCP Клиент</td><td>UDP</td></tr>
+    <tr><td><strong>69</strong></td><td>TFTP</td><td>UDP</td></tr>
+    <tr><td><strong>80</strong></td><td>HTTP</td><td>TCP</td></tr>
+    <tr><td><strong>110</strong></td><td>POP3</td><td>TCP</td></tr>
+    <tr><td><strong>143</strong></td><td>IMAP</td><td>TCP</td></tr>
+    <tr><td><strong>161/162</strong></td><td>SNMP</td><td>UDP</td></tr>
+    <tr><td><strong>443</strong></td><td>HTTPS</td><td>TCP</td></tr>
+  </table>
+
+  <h4>Портын мужууд</h4>
+  <table>
+    <tr><th>Муж</th><th>Төрөл</th><th>Тайлбар</th></tr>
+    <tr><td>0–1023</td><td>Сайн мэдэгдэх</td><td>Нөөцлөгдсөн стандарт үйлчилгээ</td></tr>
+    <tr><td>1024–49151</td><td>Бүртгэлтэй</td><td>IANA тодорхой программ хангамжид хуваарилдаг (жш. Cisco RADIUS = 1812)</td></tr>
+    <tr><td>49152–65535</td><td>Динамик / Эпимерал</td><td>Клиентэд ОС динамикаар хуваарилдаг түр зуурын порт</td></tr>
+  </table>
+
+  <h3>Сокетууд (Sockets)</h3>
+  <p>Сокет = <strong>IP хаяг + порт</strong>. Эхийн IP + Эхийн порт + Очих IP + Очих порт хослол нь холболтыг өвөрмөцөөр тодорхойлно.</p>
+  <pre>! Идэвхтэй холболтыг харах (Windows):
+C:\> netstat
+
+! Портуудтай харах:
+C:\> netstat -n</pre>
+</section>
+
+<!-- ═══════════════════════════ APPLICATION ═══════════════════════════ -->
+<section class="module" id="app">
+  <div class="module-header">
+    <div class="module-num">15</div>
+    <div class="module-title">
+      <h2>Програмын давхарга</h2>
+      <p>HTTP, DNS, DHCP, FTP, Имэйл протоколууд</p>
+    </div>
+  </div>
+
+  <h3>TCP/IP програмын давхаргын OSI давхаргууд</h3>
+  <ul>
+    <li><strong>Програм (7)</strong> — харилцан үйлчлэлийн протоколууд (HTTP, DNS, FTP).</li>
+    <li><strong>Танилцуулга (6)</strong> — форматлах, шахах, шифрлэх/тайлах.</li>
+    <li><strong>Сессий (5)</strong> — яриа, сессий удирдах.</li>
+  </ul>
+
+  <h3>Клиент-сервер ба P2P загварууд</h3>
+  <ul>
+    <li><strong>Клиент-Сервер</strong> — клиент хүсэлт тавьж, сервер нөөц хангана.</li>
+    <li><strong>Үе тэнгийн-Үе тэнгийн (P2P)</strong> — хоёр төхөөрөмж нэгэн зэрэг клиент болон сервер байж болно. Тусгай сервер байхгүй.</li>
+  </ul>
+
+  <h3>HTTP / HTTPS</h3>
+  <ul>
+    <li>HTTP — порт <strong>80</strong>, TCP.</li>
+    <li>HTTPS — порт <strong>443</strong>, TCP. Шифрлэгдсэн.</li>
+    <li>Аргууд: <strong>GET</strong> (хуудас авах), <strong>POST</strong> (серверт өгөгдөл илгээх), <strong>PUT</strong> (өгөгдөл шинэчлэх).</li>
+  </ul>
+
+  <h3>Имэйл протоколууд</h3>
+  <table>
+    <tr><th>Протокол</th><th>Зориулалт</th><th>Порт</th></tr>
+    <tr><td><strong>SMTP</strong></td><td>Имэйл илгээх</td><td>25 (TCP)</td></tr>
+    <tr><td><strong>POP3</strong></td><td>Имэйл хүлээн авах (төхөөрөмжид татаж авна, серверээс устгана)</td><td>110 (TCP)</td></tr>
+    <tr><td><strong>IMAP</strong></td><td>Имэйл хүлээн авах (мессеж серверт үлдэнэ)</td><td>143 (TCP)</td></tr>
+  </table>
+
+  <h3>DNS — Домэйн нэрийн систем</h3>
+  <ul>
+    <li>Порт: <strong>53</strong> (UDP ба TCP).</li>
+    <li>Нэрийг (<code>www.cisco.com</code>) IP хаяг болгон хөрвүүлдэг.</li>
+    <li>Шаталсан бүтэц: Үндэс → TLD (.com, .org) → Домэйн (cisco) → Дэд домэйн (www).</li>
+  </ul>
+
+  <h3>DHCP — DORA процесс</h3>
+  <div class="highlight-box">
+    <p style="font-family: var(--mono); line-height: 2.4; color: #a5f3fc;">
+      1. <span style="color:#f59e0b;">DISCOVER</span> — клиент broadcast: "DHCP сервер байна уу?"<br>
+      2. <span style="color:#34d399;">OFFER</span> — сервер unicast/broadcast: "ийм IP чинийх"<br>
+      3. <span style="color:#60a5fa;">REQUEST</span> — клиент broadcast: "X серверийн санал зөвшөөрч байна"<br>
+      4. <span style="color:#a78bfa;">ACK</span> — сервер: "баталгаажлаа, IP X хугацаанд чинийх"
+    </p>
+    <p>Санал хүчингүй бол → <strong>NACK</strong> → процесс эхнээс эхэлнэ.</p>
+    <p>IPv6 аналог: <strong>SOLICIT → ADVERTISE → REQUEST → REPLY</strong></p>
+  </div>
+
+  <ul>
+    <li>DHCP Клиент порт: <strong>68</strong> (UDP)</li>
+    <li>DHCP Сервер порт: <strong>67</strong> (UDP)</li>
+  </ul>
+
+  <h3>FTP — Файл дамжуулах протокол</h3>
+  <ul>
+    <li><strong>Порт 21</strong> — Удирдлагын холболт (командууд). Сессийн турш нээлттэй байна.</li>
+    <li><strong>Порт 20</strong> — Өгөгдлийн холболт (файл дамжуулалт). Дамжуулалт болгонд нээгддэг.</li>
+    <li>FTP клиент файл татаж авах (pull) болон илгээх (push) боломжтой.</li>
+  </ul>
+
+  <h3>SMB — Серверийн мессежийн блок</h3>
+  <p>Файл ба принтер хуваалцах протокол. Клиент серверт холбогдон файлтай нь локал мэт ажилладаг. SMB мессежийн гурван функц:</p>
+  <ul>
+    <li>Сессий эхлүүлэх, баталгаажуулалт, дуусгавар.</li>
+    <li>Файл, принтерт хандалт удирдах.</li>
+    <li>Програм хангамжид нөгөө төхөөрөмжтэй мессеж солилцох боломж олгох.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════ ACL ═══════════════════════════ -->
+<section class="module" id="acl">
+  <div class="module-header">
+    <div class="module-num">ACL</div>
+    <div class="module-title">
+      <h2>ACL — Хандалт хянах жагсаалт</h2>
+      <p>Трафик шүүх, wildcard маск, ACL төрлүүд</p>
+    </div>
+  </div>
+
+  <h3>ACL гэж юу вэ</h3>
+  <p>ACL — толгойн мэдээллээр пакет шүүхийн тулд IOS командуудын цуврал. Анхдагчаар роутерт ACL байхгүй. ACL нь ACE (Хандалт хянах бичлэг) агуулдаг — дарааллагдсан permit/deny дүрэм.</p>
+
+  <div class="card danger">
+    <div class="tip-label">⚠️ Далд татгалзал</div>
+    <p>Аль ч ACL-ийн төгсгөлд <strong>далд deny all</strong> байдаг — нуугдсан <code>deny any</code> мөр. Тодорхой дүрэмд тохирохгүй бүх трафик — <strong>блоклогдоно</strong>. ACL хамгийн багадаа нэг <code>permit</code> дүрэм агуулах ёстой!</p>
+  </div>
+
+  <h3>ACL-ийн төрлүүд</h3>
+  <div class="two-col">
+    <div class="card info">
+      <div class="tip-label">Стандарт ACL — Дугаар 1-99 ба 1300-1999</div>
+      <ul>
+        <li>Зөвхөн <strong>Эхийн IP</strong>-д шүүнэ (3-р давхарга)</li>
+        <li>Хамгийн ойрхон <strong>очих газар</strong>-д байрлуулна</li>
+      </ul>
+    </div>
+    <div class="card warn">
+      <div class="tip-label">Өргөтгөсөн ACL — Дугаар 100-199 ба 2000-2699</div>
+      <ul>
+        <li>Эхийн IP, Очих IP, протокол, портод шүүнэ (3-р + 4-р давхарга)</li>
+        <li>Хамгийн ойрхон <strong>эх</strong>-д байрлуулна</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>ACL дэх Wildcard маск</h3>
+  <p>Wildcard маск — дэд сүлжээний маскийн <strong>урвуу</strong>. Бит <strong>0</strong> = шалгах (match), бит <strong>1</strong> = үл тоох.</p>
+  <div class="highlight-box">
+    <p><strong>Wildcard тооцоолох:</strong> 255.255.255.255 − дэд сүлжээний маск = wildcard</p>
+    <ul style="font-family: var(--mono); font-size: 0.85rem; line-height: 2;">
+      <li>Хост: <code>192.168.1.1 0.0.0.0</code> → зөвхөн энэ IP</li>
+      <li>/24 сүлжээ: <code>192.168.1.0 0.0.0.255</code> → бүх 192.168.1.x</li>
+      <li>/28 сүлжээ: <code>192.168.1.32 0.0.0.15</code> → дэд сүлжээний 14 хост</li>
+    </ul>
+    <p><strong>Түлхүүр үгс:</strong></p>
+    <ul>
+      <li><code>host</code> = 0.0.0.0 wildcard (яг энэ хост)</li>
+      <li><code>any</code> = 255.255.255.255 wildcard (ямар ч IP)</li>
+    </ul>
+  </div>
+
+  <h3>ACL хэрэглэх</h3>
+  <ul>
+    <li><strong>Inbound ACL</strong> — чиглүүлэхийн өмнө шүүнэ. Илүү үр ашигтай (устгагдах пакетад routing lookup хийхгүй).</li>
+    <li><strong>Outbound ACL</strong> — чиглүүлсний дараа шүүнэ.</li>
+    <li>Нэг интерфейст: 1 inbound IPv4 ACL + 1 outbound IPv4 ACL + 1 inbound IPv6 ACL + 1 outbound IPv6 ACL = хамгийн ихдээ 4 ACL байж болно.</li>
+  </ul>
+
+  <h3>ACL тохиргооны жишээ</h3>
+  <pre>! Стандарт ACL (дугаарлагдсан):
+R1(config)# access-list 10 permit 192.168.1.0 0.0.0.255
+R1(config)# access-list 10 deny any
+R1(config)# interface g0/0
+R1(config-if)# ip access-group 10 out
+
+! Өргөтгөсөн ACL:
+R1(config)# access-list 110 permit tcp 192.168.1.0 0.0.0.255 any eq 80
+R1(config)# access-list 110 deny ip any any
+
+! Нэрлэгдсэн ACL (илүү тохиромжтой):
+R1(config)# ip access-list standard BLOCK-SALES
+R1(config-std-nacl)# deny 192.168.2.0 0.0.0.255
+R1(config-std-nacl)# permit any
+
+! Интерфейст хэрэглэх:
+R1(config)# interface g0/1
+R1(config-if)# ip access-group BLOCK-SALES in
+
+! Шалгах:
+R1# show access-lists
+R1# show ip interface g0/0</pre>
+
+  <div class="card success">
+    <div class="tip-label">✅ ACL-ийн шилдэг дадлага</div>
+    <ul>
+      <li>Байгууллагын аюулгүй байдлын бодлогод үндэслэн ACL боловсрул.</li>
+      <li>Командууд бичихийн өмнө ACL юу хийхийг бич.</li>
+      <li>ACL үүсгэх, засахад текст засварлагч ашигла.</li>
+      <li><code>remark</code> командаар ACL-ийг баримтжуул.</li>
+      <li>Үйлдвэрлэлийн сүлжээнд хэрэглэхийн өмнө туршилтын сүлжээнд тест хий.</li>
+    </ul>
+  </div>
+
+  <h3>Хурдан шуурхай — Шалгалтанд гарах бүх зүйл</h3>
+  <div class="card" style="background: linear-gradient(135deg, rgba(59,130,246,.08), rgba(34,211,238,.06)); border-color: rgba(59,130,246,.3);">
+    <div class="tip-label" style="color: var(--accent2);">🔥 Заавал асуух жижиг нарийн ширийн зүйлс</div>
+    <table>
+      <tr><th>Баримт</th><th>Утга</th></tr>
+      <tr><td>UDP Протоколын дугаар</td><td><strong>17</strong></td></tr>
+      <tr><td>TCP Протоколын дугаар</td><td><strong>6</strong></td></tr>
+      <tr><td>ICMP Протоколын дугаар</td><td><strong>1</strong></td></tr>
+      <tr><td>OSPF Административ зай</td><td><strong>110</strong></td></tr>
+      <tr><td>OSPF Hello интервал</td><td><strong>10 секунд</strong></td></tr>
+      <tr><td>OSPF Dead интервал</td><td><strong>40 секунд</strong> (4 × Hello)</td></tr>
+      <tr><td>OSPF Бүх роутерийн Multicast</td><td><strong>224.0.0.5</strong></td></tr>
+      <tr><td>OSPF DR/BDR Multicast</td><td><strong>224.0.0.6</strong></td></tr>
+      <tr><td>Стандарт MSS</td><td><strong>1460 байт</strong> (1500 − 40)</td></tr>
+      <tr><td>Ethernet MTU</td><td><strong>1500 байт</strong></td></tr>
+      <tr><td>Хамгийн бага Ethernet фрейм</td><td><strong>64 байт</strong></td></tr>
+      <tr><td>MAC хаяг</td><td><strong>48 бит = 6 байт</strong></td></tr>
+      <tr><td>IPv4 хаяг</td><td><strong>32 бит = 4 байт</strong></td></tr>
+      <tr><td>IPv6 хаяг</td><td><strong>128 бит = 16 байт</strong></td></tr>
+      <tr><td>802.1Q тэгийн хэмжээ</td><td><strong>4 байт</strong></td></tr>
+      <tr><td>802.1Q TPID</td><td><strong>0x8100</strong></td></tr>
+      <tr><td>VID талбарын (VLAN ID) бит</td><td><strong>12 бит</strong> → 4096 VLAN</td></tr>
+      <tr><td>CAM хүснэгтийн таймаут</td><td><strong>5 минут</strong></td></tr>
+      <tr><td>2960-д анхдагч DTP</td><td><strong>dynamic auto</strong></td></tr>
+      <tr><td>PAgP — Cisco өмчийн</td><td>On / Desirable / Auto</td></tr>
+      <tr><td>LACP — IEEE 802.3ad</td><td>On / Active / Passive</td></tr>
+      <tr><td>EtherChannel хамгийн их порт</td><td><strong>8 порт</strong></td></tr>
+      <tr><td>Стандарт ACL муж</td><td><strong>1-99</strong> ба <strong>1300-1999</strong></td></tr>
+      <tr><td>Өргөтгөсөн ACL муж</td><td><strong>100-199</strong> ба <strong>2000-2699</strong></td></tr>
+      <tr><td>DHCP: Клиент порт</td><td><strong>68</strong> (UDP)</td></tr>
+      <tr><td>DHCP: Сервер порт</td><td><strong>67</strong> (UDP)</td></tr>
+      <tr><td>FTP Удирдлагын порт</td><td><strong>21</strong> (TCP)</td></tr>
+      <tr><td>FTP Өгөгдлийн порт</td><td><strong>20</strong> (TCP)</td></tr>
+      <tr><td>DHCP Процесс</td><td><strong>DORA</strong>: Discover → Offer → Request → Ack</td></tr>
+      <tr><td>TCP Handshake</td><td><strong>SYN → SYN+ACK → ACK</strong></td></tr>
+      <tr><td>TCP Дуусгавар</td><td><strong>FIN → ACK → FIN → ACK</strong></td></tr>
+      <tr><td>Wildcard: 0 бит</td><td>Тохирох (шалгах)</td></tr>
+      <tr><td>Wildcard: 1 бит</td><td>Үл тоох</td></tr>
+      <tr><td>Анхдагч Native VLAN</td><td><strong>VLAN 1</strong></td></tr>
+      <tr><td>VLAN 1 — устгах уу?</td><td><strong>Үгүй!</strong></td></tr>
+      <tr><td>OSPF Cost томъёо</td><td>100,000,000 / зурваасын өргөн (bps)</td></tr>
+      <tr><td>Шилэн: Нэг горим өнгө</td><td><strong>Шар</strong></td></tr>
+      <tr><td>Шилэн: Олон горим өнгө</td><td><strong>Улбар шар / Аква</strong></td></tr>
+      <tr><td>STP бүтээсэн</td><td><strong>Radia Perlman</strong>, 1985</td></tr>
+      <tr><td>Broadcast MAC</td><td><strong>FF:FF:FF:FF:FF:FF</strong></td></tr>
+      <tr><td>IPv4 Loopback</td><td><strong>127.0.0.1</strong></td></tr>
+      <tr><td>IPv6 Loopback</td><td><strong>::1</strong></td></tr>
+    </table>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.module');
+  const navLinks = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = '';
+          link.style.borderLeftColor = '';
+          link.style.background = '';
+        });
+        const id = entry.target.id;
+        const active = document.querySelector(`nav a[href="#${id}"]`);
+        if (active) {
+          active.style.color = '#e2e8f0';
+          active.style.borderLeftColor = '#22d3ee';
+          active.style.background = 'rgba(34,211,238,.06)';
+        }
+      }
+    });
+  }, { rootMargin: '-120px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
